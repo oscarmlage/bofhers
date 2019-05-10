@@ -20,3 +20,8 @@ Really fast prototyping app for "jobs" and "software" for BOFHers, just for fun.
 - description
 - tags
 - os?
+
+## Credentials
+
+- admin@bofhers.com
+- 123123
