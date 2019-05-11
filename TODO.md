@@ -2,49 +2,58 @@
 
 Really fast prototyping app for "jobs" and "software" for BOFHers, just for fun.
 
-## Jobs
-
-- date
-- company
-- city
-- company_link
-- offer_link
-- description
-- tags
-- is_remote
-
-## Software
-
-- name
-- link
-- description
-- tags
-- os?
-
-## Users
-
-- extends backopack user
-- name?
-- nick
-- slug
-- categories/tags (fk)
-
-## Categories / tags
-
-- name
-- slug
-- type? (not mandatory right now IMHO)
-
 ## Credentials
 
 - admin@bofhers.com
 - 123123
 
-## Session 2 goals
+## Sessions
 
-- Categories
-- Users
+## Session 1 goals (20190510)
 
-## Session 3 possible goals
+- [x] Jobs
+- [x] Software
+
+## Session 2 goals  (20190511)
+
+- [x] Categories
+- [x] Users
+
+## Session 3 possible goals (2019whoknowswhen)
 
 - Frontend
+
+## Models brainstorming
+
+### Jobs
+
+- [x] date
+- [x] company
+- [x] city
+- [x] company_link
+- [x] offer_link
+- [x] description
+- [x] tags
+- [x] is_remote
+
+### Software
+
+- [x] name
+- [x] link
+- [x] description
+- [x] tags
+- [x] os
+
+### Users
+
+- extends backpack user
+- [x] name?
+- [x] email
+- [x] nick
+- [x] slug
+- [x] categories/tags (fk)
+
+### Categories / tags
+
+- [x] name
+- [x] slug
