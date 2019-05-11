@@ -21,7 +21,30 @@ Really fast prototyping app for "jobs" and "software" for BOFHers, just for fun.
 - tags
 - os?
 
+## Users
+
+- extends backopack user
+- name?
+- nick
+- slug
+- categories/tags (fk)
+
+## Categories / tags
+
+- name
+- slug
+- type? (not mandatory right now IMHO)
+
 ## Credentials
 
 - admin@bofhers.com
 - 123123
+
+## Session 2 goals
+
+- Categories
+- Users
+
+## Session 3 possible goals
+
+- Frontend
