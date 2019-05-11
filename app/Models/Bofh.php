@@ -4,14 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 
-class Category extends Model
+class Bofh extends Model
 {
     use CrudTrait;
-    use Sluggable;
-    use SluggableScopeHelpers;
 
     /*
     |--------------------------------------------------------------------------
@@ -19,7 +15,7 @@ class Category extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'categories';
+    protected $table = 'users';
     protected $primaryKey = 'id';
     public $timestamps = true;
     protected $guarded = ['id'];
@@ -40,15 +36,9 @@ class Category extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function users() {
+    public function categories() {
         return $this->belongsToMany(
-            'App\User', 'users_categories', 'category_id', 'user_id'
-        );
-    }
-
-    public function jobs() {
-        return $this->belongsToMany(
-            '\App\Models\Job', 'jobs_categories', 'category_id', 'job_id'
+            'App\Models\Category', 'users_categories', 'user_id', 'category_id'
         );
     }
 
@@ -76,10 +66,3 @@ class Category extends Model
     |--------------------------------------------------------------------------
     */
 }
-
-
-// class UsersCategory extends Category {
-//     public static function boot() {
-//         parent::boot();
-//     }
-// }

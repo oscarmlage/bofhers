@@ -5,3 +5,4 @@
 <li><a href="{{ backpack_url('software') }}"><i class="fa fa-dashboard"></i> <span>Software</span></a></li>
 <li><a href="{{ backpack_url('job') }}"><i class="fa fa-dashboard"></i> <span>Jobs</span></a></li>
 <li><a href="{{ backpack_url('category') }}"><i class="fa fa-dashboard"></i> <span>Categories</span></a></li>
+<li><a href="{{ backpack_url('bofh') }}"><i class="fa fa-dashboard"></i> <span>BOFHers</span></a></li>
