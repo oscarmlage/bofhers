@@ -18,6 +18,7 @@ Really fast prototyping app for "jobs" and "software" for BOFHers, just for fun.
 
 - [x] Categories
 - [x] Users
+- Roles and Permissions?
 
 ## Session 3 possible goals (2019whoknowswhen)
 
