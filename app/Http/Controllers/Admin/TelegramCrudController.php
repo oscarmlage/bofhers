@@ -35,7 +35,13 @@ class TelegramCrudController extends CrudController
 
         // TODO: remove setFromDb() and manually define Fields and Columns
         $this->crud->addColumn(['name' => 'id', 'label' => 'id' ] );
-        $this->crud->setFromDb();
+        $this->crud->addColumn(['name' => 'chat_id']);
+        $this->crud->addColumn(['name' => 'nick']);
+        $this->crud->addColumn([
+            'name' => 'text',
+            'type' => 'text',
+            'limit' => 40,
+        ]);
         $this->crud->addColumn(['name' => 'created_at', 'label' => 'created_at' ] );
 
 

@@ -71,7 +71,7 @@ class TelegramCanalCrudController extends CrudController
             'name' => 'active',
             'type' => 'closure',
             'function' => function($entry) {
-                return $entry->active ? '<span class="text-danger"><i class="fa fa-fw fa-pause"></i> Active</span>' : '<span class="text-info"><i class="fa fa-fw fa-play"></i> Inactive</span>';
+                return $entry->active ? '<span class="label label-success"><i class="fa fa-check" title="Remote"></i></span>' : '<span class="label label-danger"><i class="fa fa-remove" title="NOT remote"></i></span>';
             }
         ]);
 
