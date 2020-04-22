@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Telegram\Bot\Api as Telegram;
 
 use \App\Models\Telegram as Tel;
+use \App\Models\TelegramCanal as Canal;
 
 class TelegramController extends Controller
 {
@@ -73,6 +74,10 @@ class TelegramController extends Controller
             case '/menutifu':
                 $this->sendMessage('Aquí debería ir el menú con los comandos disponibles');
                 //$this->showMenu();
+                break;
+            case '!canal':
+                $canal = Canal::where('chat_id', $this->chat_id)->firstOrFail();
+                $this->sendMessage($canal);
                 break;
            default:
                 /* $this->showMenu(); */
