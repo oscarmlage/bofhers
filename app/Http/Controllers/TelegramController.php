@@ -83,6 +83,10 @@ class TelegramController extends Controller
                 $canal = Canal::where('chat_id', $this->chat_id)->first();
                 $this->sendMessage($canal->web);
                 break;
+            case '!anclado':
+                $this->sendMessage('¡¡El que tengo aquí colgado!!');
+                //$this->showMenu();
+                break;
            default:
                 /* $this->showMenu(); */
         }
