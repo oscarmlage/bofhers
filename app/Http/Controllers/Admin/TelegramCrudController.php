@@ -34,7 +34,10 @@ class TelegramCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
+        $this->crud->addColumn(['name' => 'id', 'label' => 'id' ] );
         $this->crud->setFromDb();
+        $this->crud->addColumn(['name' => 'created_at', 'label' => 'created_at' ] );
+
 
         // add asterisk for fields that are required in TelegramRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');

@@ -36,10 +36,27 @@ class TelegramController extends Controller
 
     public function handleRequest(Request $request)
     {
-        $this->chat_id = $request['message']['chat']['id'];
-        $this->username = $request['message']['from']['username'];
-        $this->text = $request['message']['text'];
-        $data = ['nick'=>$this->username, 'chat_id'=>$this->chat_id, 'text'=>$this->text];
+        file_put_contents('telegram.log', $request);
+        $this->chat_id = isset($request['message']['chat']['id']) ? $request['message']['chat']['id'] : 0;
+        $this->username = isset($request['message']['from']['username']) ? $request['message']['from']['username'] : 'no-username';
+        $this->first_name = isset($request['message']['from']['first_name']) ? $request['message']['from']['first_name'] : 'no-first-name';
+        $this->last_name = isset($request['message']['from']['last_name']) ? $request['message']['from']['last_name'] : 'no-last-name';
+        $this->telegram_user_id = isset($request['message']['from']['id']) ? $request['message']['from']['id'] : 'no-telegram-id';
+        $this->text = isset($request['message']['text']) ? $request['message']['text']: 'no-text';
+
+        /* $this->chat_id = $request['message']['chat']['id']; */
+        /* $this->username = $request['message']['from']['username']; */
+        /* $this->text = $request['message']['text']; */
+
+        $data = [
+            'chat_id'=>$this->chat_id,
+            'nick'=>$this->username,
+            'first_name'=>$this->first_name,
+            'last_name'=>$this->last_name,
+            'telegram_user_id'=>$this->telegram_user_id,
+            'text'=>$this->text,
+            'request'=>$request
+        ];
         $tel = new Tel($data);
         $tel->save();
         switch ($this->text) {
