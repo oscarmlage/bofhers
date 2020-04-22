@@ -7,6 +7,7 @@
 <li><a href="{{ backpack_url('category') }}"><i class="fa fa-dashboard"></i> <span>Categories</span></a></li>
 <li><a href="{{ backpack_url('bofh') }}"><i class="fa fa-dashboard"></i> <span>BOFHers</span></a></li>
 <li><a href='{{ backpack_url('telegram') }}'><i class='fa fa-tag'></i> <span>Telegram</span></a></li>
+<li><a href='{{ backpack_url('telegram_canal') }}'><i class='fa fa-tag'></i> <span>Telegram, canales</span></a></li>
 
 <!-- Users, Roles Permissions -->
   <li class="treeview">

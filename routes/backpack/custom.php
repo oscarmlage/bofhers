@@ -16,4 +16,5 @@ Route::group([
     CRUD::resource('category', 'CategoryCrudController');
     CRUD::resource('bofh', 'BofhCrudController');
     CRUD::resource('telegram', 'TelegramCrudController');
+    CRUD::resource('telegram_canal', 'TelegramCanalCrudController');
 }); // this should be the absolute last line of this file
