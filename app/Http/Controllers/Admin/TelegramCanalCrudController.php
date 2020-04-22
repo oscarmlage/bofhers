@@ -53,6 +53,10 @@ class TelegramCanalCrudController extends CrudController
             'type' => 'simplemde',
         ]);
         $this->crud->addField([
+            'name' => 'web',
+            'tab' => 'Basic data',
+        ]);
+        $this->crud->addField([
             'name' => 'active',
             'label' => 'Active',
             'type' => 'checkbox',

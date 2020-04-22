@@ -76,8 +76,12 @@ class TelegramController extends Controller
                 //$this->showMenu();
                 break;
             case '!canal':
-                $canal = Canal::where('chat_id', $this->chat_id)->firstOrFail();
-                $this->sendMessage($canal);
+                $canal = Canal::where('chat_id', $this->chat_id)->first();
+                $this->sendMessage($canal->description);
+                break;
+            case '!web':
+                $canal = Canal::where('chat_id', $this->chat_id)->first();
+                $this->sendMessage($canal->web);
                 break;
            default:
                 /* $this->showMenu(); */
