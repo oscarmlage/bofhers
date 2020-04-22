@@ -13,11 +13,9 @@ Really fast prototyping app for "jobs" and "software" for BOFHers, just for fun.
 
 - Comandos sugeridos:
   - !insulto
-  - !web
   - !felicita @alguien
   - !guardainsulto
   - !addquote y !quote
-  - !anclado "el que tengo aquí colgado"
 
 ## Session 1 goals (20190510)
 

@@ -16,7 +16,8 @@
         "fideloper/proxy": "^4.0",
         "irazasyed/telegram-bot-sdk": "dev-develop",
         "laravel/framework": "5.8.*",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "symfony/http-foundation": "4.2.12"
     },
     "require-dev": {
         "backpack/generators": "^1.2",
