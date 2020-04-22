@@ -43,17 +43,17 @@ class TelegramController extends Controller
         $tel = new Tel($data);
         $tel->save();
         switch ($this->text) {
-            case 'ahoy':
+            case 'ahoy tifu':
                 $this->sendMessage('Ahoy Matey! So, Ye want t\' talk like a
                     pirate aye...');
                 break;
-            case 'hi':
+            case 'hi tifu':
                 $this->sendMessage('Ahoy Matey! So, Ye want t\' talk like a pirate aye...');
                 break;
-            case 'joke':
+            case 'joke tifu':
                 $this->sendMessage('What is a robot\'s favorite type of music?... Heavy metal!');
                 break;
-            case '/menu':
+            case '/menutifu':
                 $this->sendMessage('Aquí debería ir el menú con los comandos disponibles');
                 //$this->showMenu();
                 break;
