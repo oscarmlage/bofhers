@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Admin;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
-use App\Http\Requests\JobRequest as StoreRequest;
-use App\Http\Requests\JobRequest as UpdateRequest;
+use App\Http\Requests\QuoteRequest as StoreRequest;
+use App\Http\Requests\QuoteRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
 
 /**
- * Class JobCrudController
+ * Class QuoteCrudController
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class JobCrudController extends CrudController
+class QuoteCrudController extends CrudController
 {
     public function setup()
     {
@@ -23,9 +23,9 @@ class JobCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('App\Models\Job');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/job');
-        $this->crud->setEntityNameStrings('job', 'jobs');
+        $this->crud->setModel('App\Models\Quote');
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/quote');
+        $this->crud->setEntityNameStrings('quote', 'quotes');
 
         /*
         |--------------------------------------------------------------------------
@@ -34,27 +34,38 @@ class JobCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
-        // $this->crud->setFromDb();
+        //$this->crud->setFromDb();
 
         /* Fields */
         $this->crud->addField([
-            'name' => 'company',
+            'name' => 'nick',
+            'tab' => 'Basic data',
+            'wrapperAttributes' => ['class' => 'col-md-4'],
+        ]);
+        $this->crud->addField([
+            'name' => 'first_name',
+            'tab' => 'Basic data',
+            'wrapperAttributes' => ['class' => 'col-md-4'],
+        ]);
+        $this->crud->addField([
+            'name' => 'last_name',
+            'tab' => 'Basic data',
+            'wrapperAttributes' => ['class' => 'col-md-4'],
+        ]);
+        $this->crud->addField([
+            'name' => 'telegram_user_id',
             'tab' => 'Basic data',
             'wrapperAttributes' => ['class' => 'col-md-6'],
         ]);
         $this->crud->addField([
-            'name' => 'company_link',
+            'name' => 'chat_id',
             'tab' => 'Basic data',
             'wrapperAttributes' => ['class' => 'col-md-6'],
         ]);
         $this->crud->addField([
-            'name' => 'description',
+            'name' => 'quote',
             'tab' => 'Basic data',
             'type' => 'simplemde',
-        ]);
-        $this->crud->addField([
-            'name' => 'offer_link',
-            'tab' => 'Basic data',
         ]);
         $this->crud->addField([
             'label' => "Categories",
@@ -68,55 +79,31 @@ class JobCrudController extends CrudController
             'tab' => 'Basic data'
         ], 'both');
         $this->crud->addField([
-            'name' => 'date',
+            'name' => 'active',
+            'label' => 'Active',
+            'type' => 'checkbox',
             'tab' => 'Basic data',
-            'type' => 'date',
-            'wrapperAttributes' => ['class' => 'col-md-4'],
-        ]);
-        $this->crud->addField([
-            'name' => 'city',
-            'tab' => 'Basic data',
-            'wrapperAttributes' => ['class' => 'col-md-4'],
-        ]);
-        $this->crud->addField([
-            'name' => 'is_remote',
-            'tab' => 'Basic data',
-            'type' => 'radio',
-            'options' => [
-                0 => "No",
-                1 => "Yes"
-            ],
-            'wrapperAttributes' => ['class' => 'col-md-4'],
+            'wrapperAttributes' => ['class' => 'col-md-6']
         ]);
 
         /* Columns */
+        $this->crud->addColumn(['name' => 'id', 'label' => 'id' ] );
+        $this->crud->addColumn(['name' => 'chat_id']);
+        $this->crud->addColumn(['name' => 'nick']);
         $this->crud->addColumn([
-            'name' => 'date',
-            'label' => 'Date',
+            'name' => 'quote',
+            'type' => 'text',
+            'limit' => 40,
         ]);
         $this->crud->addColumn([
-            'name' => 'company',
-            'label' => 'Company',
-        ]);
-        $this->crud->addColumn([
-            'name' => 'description',
-            'label' => 'Description',
-        ]);
-        $this->crud->addColumn([
-            'name' => 'city',
-            'label' => 'City',
-        ]);
-        $this->crud->addColumn([
-            'name' => 'is_remote',
-            'label' => 'Remote Job?',
+            'name' => 'active',
             'type' => 'closure',
             'function' => function($entry) {
-                return $entry->is_remote ? '<span class="label label-success"><i class="fa fa-check" title="Remote"></i></span>' : '<span class="label label-danger"><i class="fa fa-remove" title="NOT remote"></i></span>';
+                return $entry->active ? '<span class="label label-success"><i class="fa fa-check" title="Remote"></i></span>' : '<span class="label label-danger"><i class="fa fa-remove" title="NOT remote"></i></span>';
             }
         ]);
 
-
-        // add asterisk for fields that are required in JobRequest
+        // add asterisk for fields that are required in QuoteRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
     }

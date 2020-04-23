@@ -31,6 +31,11 @@ class Job extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function categories() {
+        return $this->belongsToMany(
+            'App\Models\Category', 'jobs_categories', 'job_id', 'category_id'
+        );
+    }
 
     /*
     |--------------------------------------------------------------------------

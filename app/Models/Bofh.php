@@ -19,7 +19,7 @@ class Bofh extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     protected $guarded = ['id'];
-    
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

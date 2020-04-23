@@ -34,6 +34,52 @@ class TelegramCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
+
+        /* Fields */
+        $this->crud->addField([
+            'name' => 'nick',
+            'tab' => 'Basic data',
+            'wrapperAttributes' => ['class' => 'col-md-4'],
+        ]);
+        $this->crud->addField([
+            'name' => 'first_name',
+            'tab' => 'Basic data',
+            'wrapperAttributes' => ['class' => 'col-md-4'],
+        ]);
+        $this->crud->addField([
+            'name' => 'last_name',
+            'tab' => 'Basic data',
+            'wrapperAttributes' => ['class' => 'col-md-4'],
+        ]);
+        $this->crud->addField([
+            'name' => 'telegram_user_id',
+            'tab' => 'Basic data',
+            'wrapperAttributes' => ['class' => 'col-md-6'],
+        ]);
+        $this->crud->addField([
+            'name' => 'chat_id',
+            'tab' => 'Basic data',
+            'wrapperAttributes' => ['class' => 'col-md-6'],
+        ]);
+        $this->crud->addField([
+            'name' => 'text',
+            'tab' => 'Basic data',
+            'type' => 'simplemde',
+        ]);
+        $this->crud->addField([
+            'name' => 'request',
+            'tab' => 'Basic data',
+            'type' => 'simplemde',
+        ]);
+        $this->crud->addField([
+            'name' => 'active',
+            'label' => 'Active',
+            'type' => 'checkbox',
+            'tab' => 'Basic data',
+            'wrapperAttributes' => ['class' => 'col-md-6']
+        ]);
+
+        /* Columns */
         $this->crud->addColumn(['name' => 'id', 'label' => 'id' ] );
         $this->crud->addColumn(['name' => 'chat_id']);
         $this->crud->addColumn(['name' => 'nick']);

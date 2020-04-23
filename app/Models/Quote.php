@@ -4,14 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 
-class Category extends Model
+class Quote extends Model
 {
     use CrudTrait;
-    use Sluggable;
-    use SluggableScopeHelpers;
 
     /*
     |--------------------------------------------------------------------------
@@ -19,7 +15,7 @@ class Category extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'categories';
+    protected $table = 'quotes';
     protected $primaryKey = 'id';
     public $timestamps = true;
     protected $guarded = ['id'];
@@ -29,32 +25,15 @@ class Category extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public function sluggable() {
-        return [
-            'slug' => ['source' => 'slug_or_name',],
-        ];
-    }
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function users() {
+    public function categories() {
         return $this->belongsToMany(
-            'App\User', 'users_categories', 'category_id', 'user_id'
-        );
-    }
-
-    public function jobs() {
-        return $this->belongsToMany(
-            '\App\Models\Job', 'jobs_categories', 'category_id', 'job_id'
-        );
-    }
-
-    public function quotes() {
-        return $this->belongsToMany(
-            '\App\Models\Quote', 'quotes_categories', 'quote_id', 'job_id'
+            'App\Models\Category', 'quotes_categories', 'quote_id', 'category_id'
         );
     }
 
@@ -69,12 +48,6 @@ class Category extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
-    public function getSlugOrNameAttribute() {
-        if ($this->slug != '') {
-            return $this->slug;
-        }
-        return $this->name;
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -82,10 +55,3 @@ class Category extends Model
     |--------------------------------------------------------------------------
     */
 }
-
-
-// class UsersCategory extends Category {
-//     public static function boot() {
-//         parent::boot();
-//     }
-// }

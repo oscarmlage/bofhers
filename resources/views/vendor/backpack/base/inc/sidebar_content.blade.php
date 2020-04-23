@@ -9,6 +9,8 @@
 <li><a href='{{ backpack_url('telegram') }}'><i class='fa fa-tag'></i> <span>Telegram</span></a></li>
 <li><a href='{{ backpack_url('telegram_canal') }}'><i class='fa fa-tag'></i> <span>Telegram, canales</span></a></li>
 
+<li><a href='{{ backpack_url('quote') }}'><i class='fa fa-tag'></i> <span>Quotes</span></a></li>
+
 <!-- Users, Roles Permissions -->
   <li class="treeview">
     <a href="#"><i class="fa fa-group"></i> <span>Roles, Permissions</span> <i class="fa fa-angle-left pull-right"></i></a>
