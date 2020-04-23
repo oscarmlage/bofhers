@@ -17,5 +17,7 @@ Route::get('/', function () {
 
 Route::get('get-me', 'TelegramController@getMe');
 Route::get('set-hook', 'TelegramController@setWebHook');
+Route::get('del-hook', 'TelegramController@removeWebHook');
+Route::get('random', 'TelegramController@random');
 Route::post(env('TELEGRAM_BOT_TOKEN') . '/webhook', 'TelegramController@handleRequest');
 
