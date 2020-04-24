@@ -29,7 +29,7 @@ class TelegramController extends Controller
 
     public function setWebHook()
     {
-        $url = env('TELEGRAM_WEBHOOK_URL') . env('TELEGRAM_BOT_TOKEN') . '/webhook';
+        $url = env('TELEGRAM_WEBHOOK_URL') . env('TELEGRAM_WEBHOOK_KEY') . '/webhook';
         $response = $this->telegram->setWebhook(['url' => $url]);
 
         return $response == true ? "ok" : dd($response);
