@@ -119,8 +119,10 @@ class TelegramController extends Controller
                     file_put_contents('quote.log', $quote);
                     $this->sendMessage($quote->quote);
                     break;
-               default:
-                    /* $this->showMenu(); */
+                case ( preg_match( '/covid.*/', $this->text ) ? true : false ):
+                    $this->sendMessage('COVAD! Cada día te quiero mad covid covid.... 🎼🎵🎼🎵🎶');
+                    break;
+                default:
             }
         }
     }
