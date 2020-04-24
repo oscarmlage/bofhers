@@ -92,6 +92,9 @@ class TelegramController extends Controller
                 case '!anclado':
                     $this->sendMessage('¡El que tengo aquí colgado! 🍆');
                     break;
+                case '!repo':
+                    $this->sendMessage('https://github.com/oscarmlage/bofhers');
+                    break;
                 // Save new quotes
                 case ( preg_match( '/!addquote.*/', $this->text ) ? true : false ):
                     if(trim(ltrim($this->text, '!addquote')) == '') {
@@ -121,6 +124,9 @@ class TelegramController extends Controller
                     break;
                 case ( preg_match( '/covid.*/', $this->text ) ? true : false ):
                     $this->sendMessage('COVAD! Cada día te quiero mad covid covid.... 🎼🎵🎼🎵🎶');
+                    break;
+                case '!help':
+                    $this->sendMessage('De momento sólo atiendo a: <code>!quote</code>, <code>!addquote texto</code>, <code>!anclado</code>, <code>!repo</code> y <code>!help</code>. De 8h. a 2h.', true);
                     break;
                 default:
             }
