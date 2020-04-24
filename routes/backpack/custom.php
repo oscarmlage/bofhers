@@ -18,4 +18,5 @@ Route::group([
     CRUD::resource('telegram', 'TelegramCrudController');
     CRUD::resource('telegram_canal', 'TelegramCanalCrudController');
     CRUD::resource('quote', 'QuoteCrudController');
+    Route::post('/quote/change_active', ['uses' => 'QuoteCrudController@change_active', 'as' => 'quote.change_active']);
 }); // this should be the absolute last line of this file

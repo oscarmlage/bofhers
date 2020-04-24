@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
+use Illuminate\Http\Request;
+use App\Models\Quote;
+
 // VALIDATION: change the requests to match your own file names if you need form validation
 use App\Http\Requests\QuoteRequest as StoreRequest;
 use App\Http\Requests\QuoteRequest as UpdateRequest;
@@ -26,6 +29,8 @@ class QuoteCrudController extends CrudController
         $this->crud->setModel('App\Models\Quote');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/quote');
         $this->crud->setEntityNameStrings('quote', 'quotes');
+        $this->crud->enableDetailsRow();
+        $this->crud->allowAccess('details_row');
 
         /*
         |--------------------------------------------------------------------------
@@ -103,9 +108,19 @@ class QuoteCrudController extends CrudController
             }
         ]);
 
+        /* Buttons */
+        //$this->crud->limit(500);
+        //$this->crud->enableAjaxTable();
+        //$this->crud->setDefaultPageLength(10);
+        $this->crud->enableBulkActions();
+        $this->crud->addBulkDeleteButton();
+
         // add asterisk for fields that are required in QuoteRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
+
+        $this->crud->addButtonFromView('top', 'change_active', 'change_active', 'end');
+        $this->crud->addButtonFromView('bottom', 'change_active', 'change_active', 'beginning');
     }
 
     public function store(StoreRequest $request)
@@ -124,5 +139,14 @@ class QuoteCrudController extends CrudController
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
+    }
+
+    public function change_active(Request $request) {
+        $quotes = Quote::whereIn('id', $request->get('items'))->get();
+        foreach ($quotes as $quote) {
+            $quote->active = !$quote->active;
+            $quote->save();
+        }
+        return "ok";
     }
 }
