@@ -122,7 +122,7 @@ class TelegramController extends Controller
                     file_put_contents('quote.log', $quote);
                     $this->sendMessage($quote->quote);
                     break;
-                case ( preg_match( '/covid.*/', $this->text ) ? true : false ):
+                case ( preg_match( '/covid$/i', $this->text ) ? true : false ):
                     $this->sendMessage('COVAD! Cada día te quiero mad covid covid.... 🎼🎵🎼🎵🎶');
                     break;
                 case '!help':
