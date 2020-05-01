@@ -44,7 +44,6 @@ class TelegramController extends Controller
 
     public function handleRequest(Request $request)
     {
-        file_put_contents('telegram.log', $request);
         $this->chat_id = isset($request['message']['chat']['id']) ? $request['message']['chat']['id'] : 0;
         $this->username = isset($request['message']['from']['username']) ? $request['message']['from']['username'] : 'no-username';
         $this->first_name = isset($request['message']['from']['first_name']) ? $request['message']['from']['first_name'] : 'no-first-name';
@@ -86,7 +85,6 @@ class TelegramController extends Controller
                     break;
                 case '!web':
                     $canal = Canal::where('chat_id', $this->chat_id)->first();
-                    file_put_contents('web.log', $this->chat_id);
                     $this->sendMessage($canal->web);
                     break;
                 case '!anclado':
@@ -118,8 +116,6 @@ class TelegramController extends Controller
                 // Random quote
                 case '!quote':
                     $quote = Quote::where('chat_id', $this->chat_id)->where('active', 1)->orderByRaw("RAND()")->limit(1)->first();
-                    file_put_contents('quote-chatid.log', $this->chat_id);
-                    file_put_contents('quote.log', $quote);
                     $this->sendMessage($quote->quote);
                     break;
                 case ( preg_match( '/covid.*/', $this->text ) ? true : false ):
