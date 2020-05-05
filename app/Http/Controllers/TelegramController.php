@@ -116,6 +116,11 @@ class TelegramController extends Controller
                 // Random quote
                 case '!quote':
                     $quote = Quote::where('chat_id', $this->chat_id)->where('active', 1)->orderByRaw("RAND()")->limit(1)->first();
+                    $quote->active = -1;
+                    $quote->save();
+                    if(Quote::where('active', 1)->count() == 0) {
+                        Quote::where('active', '=', -1)->update(array('active' => 1));
+                    }
                     $this->sendMessage($quote->quote);
                     break;
                 case ( preg_match( '/covid.*/', $this->text ) ? true : false ):
