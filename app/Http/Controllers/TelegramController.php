@@ -128,7 +128,7 @@ class TelegramController extends Controller
                     $this->sendMessage('Y venga la burra <b>AMI</b> trigo... que nadie quiere tus 1star AMIs.',true);
                     break;
                 // COVID COVAD
-                case ( preg_match( '/covid.*/', $this->text ) ? true : false ):
+                case ( preg_match( '/covid$/i', $this->text ) ? true : false ):
                     $this->sendMessage('COVAD! Cada día te quiero mad covid covid.... 🎼🎵🎼🎵🎶');
                     break;
                 case '!help':
