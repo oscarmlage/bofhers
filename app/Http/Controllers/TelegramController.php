@@ -136,14 +136,7 @@ class TelegramController extends Controller
 
     public function random(Request $request)
     {
-        $chat_id = '-366193158';
-        /* $quote = Quote::where('chat_id', $chat_id)->where('active', 1)->orderByRandom()->limit(1)->first(); */
-        $allowed_channels = Canal::where('active', 1)->pluck('chat_id')->toArray();
-        if (in_array($chat_id, $allowed_channels)) {
-            dd($allowed_channels);
-        } else {
-            dd("no");
-        }
+        dd(Quote::where('active', -1)->count());
     }
 
     public function showMenu($info = null)
