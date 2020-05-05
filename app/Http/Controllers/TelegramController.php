@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Telegram\Bot\Api as Telegram;
+use Telegram\Bot\FileUpload\InputFile;
 
 use \App\Models\Telegram as Tel;
 use \App\Models\TelegramCanal as Canal;
@@ -50,6 +51,7 @@ class TelegramController extends Controller
         $this->last_name = isset($request['message']['from']['last_name']) ? $request['message']['from']['last_name'] : 'no-last-name';
         $this->telegram_user_id = isset($request['message']['from']['id']) ? $request['message']['from']['id'] : 'no-telegram-id';
         $this->text = isset($request['message']['text']) ? $request['message']['text']: 'no-text';
+        $this->message_id = isset($request['message']['message_id']) ? $request['message']['message_id']: '';
 
         /* $this->chat_id = $request['message']['chat']['id']; */
         /* $this->username = $request['message']['from']['username']; */
@@ -124,8 +126,15 @@ class TelegramController extends Controller
                     $this->sendMessage($quote->quote);
                     break;
                 // Pesao de las AMI
-                case ( preg_match( '/AMI.*/', $this->text ) ? true : false && $this->telegram_user_id=='181121900'):
-                    $this->sendMessage('Y venga la burra <b>AMI</b> trigo... que nadie quiere tus 1star AMIs.',true);
+                case ( (preg_match( '/AMI.*/', $this->text ) ? true : false) && $this->telegram_user_id=='181121900'):
+                    $resource = fopen(public_path('/quotes/fifu.png'), 'r');
+                    $filename = 'fifu.png';
+                    $this->telegram->sendPhoto([
+                        'chat_id' => $this->chat_id,
+                        'photo' => InputFile::create($resource, $filename),
+                        'caption' => 'Pesao, más que pesao, que nadie NADIE quiere tus 1star AMIs.',
+                        'reply_to_message_id' => $this->message_id
+                    ]);
                     break;
                 // COVID COVAD
                 case ( preg_match( '/covid$/i', $this->text ) ? true : false ):
