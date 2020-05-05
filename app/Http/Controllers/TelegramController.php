@@ -44,7 +44,6 @@ class TelegramController extends Controller
 
     public function handleRequest(Request $request)
     {
-        file_put_contents('telegram.log', $request);
         $this->chat_id = isset($request['message']['chat']['id']) ? $request['message']['chat']['id'] : 0;
         $this->username = isset($request['message']['from']['username']) ? $request['message']['from']['username'] : 'no-username';
         $this->first_name = isset($request['message']['from']['first_name']) ? $request['message']['from']['first_name'] : 'no-first-name';
@@ -86,7 +85,6 @@ class TelegramController extends Controller
                     break;
                 case '!web':
                     $canal = Canal::where('chat_id', $this->chat_id)->first();
-                    file_put_contents('web.log', $this->chat_id);
                     $this->sendMessage($canal->web);
                     break;
                 case '!anclado':
@@ -118,10 +116,18 @@ class TelegramController extends Controller
                 // Random quote
                 case '!quote':
                     $quote = Quote::where('chat_id', $this->chat_id)->where('active', 1)->orderByRaw("RAND()")->limit(1)->first();
-                    file_put_contents('quote-chatid.log', $this->chat_id);
-                    file_put_contents('quote.log', $quote);
+                    $quote->active = -1;
+                    $quote->save();
+                    if(Quote::where('active', 1)->count() == 0) {
+                        Quote::where('active', '=', -1)->update(array('active' => 1));
+                    }
                     $this->sendMessage($quote->quote);
                     break;
+                // Pesao de las AMI
+                case ( preg_match( '/AMI.*/', $this->text ) ? true : false && $this->telegram_user_id=='181121900'):
+                    $this->sendMessage('Y venga la burra <b>AMI</b> trigo... que nadie quiere tus 1star AMIs.',true);
+                    break;
+                // COVID COVAD
                 case ( preg_match( '/covid$/i', $this->text ) ? true : false ):
                     $this->sendMessage('COVAD! Cada día te quiero mad covid covid.... 🎼🎵🎼🎵🎶');
                     break;
@@ -135,14 +141,7 @@ class TelegramController extends Controller
 
     public function random(Request $request)
     {
-        $chat_id = '-366193158';
-        /* $quote = Quote::where('chat_id', $chat_id)->where('active', 1)->orderByRandom()->limit(1)->first(); */
-        $allowed_channels = Canal::where('active', 1)->pluck('chat_id')->toArray();
-        if (in_array($chat_id, $allowed_channels)) {
-            dd($allowed_channels);
-        } else {
-            dd("no");
-        }
+        dd(Quote::where('active', -1)->count());
     }
 
     public function showMenu($info = null)

@@ -54,7 +54,7 @@ class Category extends Model
 
     public function quotes() {
         return $this->belongsToMany(
-            '\App\Models\Quote', 'quotes_categories', 'quote_id', 'job_id'
+            '\App\Models\Quote', 'quotes_categories', 'category_id', 'quote_id'
         );
     }
 
