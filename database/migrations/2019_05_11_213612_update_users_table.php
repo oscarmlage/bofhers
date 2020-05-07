@@ -13,8 +13,8 @@ class UpdateUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('nick', 70)->unique();
-            $table->string('slug', 70);
+            $table->string('nick', 70)->nullable();
+            $table->string('slug', 70)->nullable();
             $table->mediumText('bio')->nullable();
             $table->boolean('is_active')->default(true);
         });
