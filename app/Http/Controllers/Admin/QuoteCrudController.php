@@ -104,7 +104,8 @@ class QuoteCrudController extends CrudController
             'name' => 'active',
             'type' => 'closure',
             'function' => function($entry) {
-                return $entry->active ? '<span class="label label-success"><i class="fa fa-check" title="Remote"></i></span>' : '<span class="label label-danger"><i class="fa fa-remove" title="NOT remote"></i></span>';
+                if($entry->active == '-1') return '<span class="label label-warning"><i class="fa fa-adjust" title="Already said"></i></span>';
+                return $entry->active ? '<span class="label label-success"><i class="fa fa-check" title="Active"></i></span>' : '<span class="label label-danger"><i class="fa fa-remove" title="Inactive"></i></span>';
             }
         ]);
 
