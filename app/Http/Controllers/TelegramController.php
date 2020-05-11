@@ -118,12 +118,16 @@ class TelegramController extends Controller
                 // Random quote
                 case '!quote':
                     $quote = Quote::where('chat_id', $this->chat_id)->where('active', 1)->orderByRaw("RAND()")->limit(1)->first();
-                    $quote->active = -1;
-                    $quote->save();
-                    if(Quote::where('active', 1)->count() == 0) {
-                        Quote::where('active', '=', -1)->update(array('active' => 1));
+                    if($quote) {
+                        $quote->active = -1;
+                        $quote->save();
                     }
-                    $this->sendMessage($quote->quote);
+                    if(Quote::where('chat_id', $this->chat_id)->where('active', 1)->count() == 0) {
+                        Quote::where('active', '=', -1)->update(array('active' => 1));
+                        $this->sendMessage('Pasamos de fase, quotes reiniciados, nivel DOS');
+                    } else {
+                        $this->sendMessage($quote->quote);
+                    }
                     break;
                 // Pesao de las AMI
                 case ( (preg_match( '/AMI.*/', $this->text ) ? true : false) && $this->telegram_user_id=='181121900'):
@@ -150,7 +154,14 @@ class TelegramController extends Controller
 
     public function random(Request $request)
     {
-        dd(Quote::where('active', -1)->count());
+        $this->chat_id = "-1001168258122";
+        $quote = Quote::where('chat_id', $this->chat_id)->where('active', 1)->orderByRaw("RAND()")->limit(1)->first();
+        if($quote) {
+            echo"we";
+        } else {
+            echo "nas";
+        }
+        dd($quote);
     }
 
     public function showMenu($info = null)
