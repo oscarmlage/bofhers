@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
             ->timezone('Europe/Madrid')
             ->dailyAt('8:30');
 
-        $schedule->command('telegram:sendquote')
+        $schedule->command('telegram:sendquote BOFHers')
             ->hourlyAt(30)
             ->timezone('Europe/Madrid')
             ->between('9:00', '23:00');
