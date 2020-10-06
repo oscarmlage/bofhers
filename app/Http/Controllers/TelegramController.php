@@ -96,7 +96,7 @@ class TelegramController extends Controller
                     $this->sendMessage('https://github.com/oscarmlage/bofhers');
                     break;
                 // Save new quotes
-                case ( preg_match( '/!addquote.*/', $this->text ) ? true : false ):
+                case ( preg_match( '/^!addquote.*/', $text ) === 1 ):
                     if(trim(ltrim($this->text, '!addquote')) == '') {
                         $this->sendMessage('❌ Pezqueñines no, gracias... ¡hay que dejarlos crecer! 🤷');
                         break;
