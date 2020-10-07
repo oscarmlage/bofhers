@@ -1,32 +1,31 @@
-# Partimos de la imagen inicial de php-fpm
 ARG PHP_VERSION=7.2
 FROM php:${PHP_VERSION}-fpm
 
-# Permitimos configurar esto desde el docker-compose
 ARG PHP_USER
 ARG PHP_UID
 ARG PHP_WORKDIR
 
-# Dependencias
+# Dependencies
 RUN apt-get update \
     && apt-get install -y zip unzip git
 
-# Configuración PHP
+# PHP Configuration
 RUN docker-php-ext-install pdo_mysql
 RUN mv "${PHP_INI_DIR}/php.ini-development" "${PHP_INI_DIR}/php.ini"
 RUN echo "memory_limit=-1" > "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
 
-# Composer
+# Composer executable and misc. utilities
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY ./scripts/bofhers_php/bofhers_php_entrypoint.sh /usr/local/bin
 
-# Usuario de PHP con permisos en /var/www y www-data
+# PHP user permissions
 RUN useradd -G www-data,root -u ${PHP_UID} -d /home/${PHP_USER} ${PHP_USER}
 RUN mkdir -p /home/${PHP_USER}/.composer && \
     chown -R ${PHP_USER}: /home/${PHP_USER}
 
-# Workdir y usuario
+# User workdir
 WORKDIR ${PHP_WORKDIR}
 USER ${PHP_USER}
 
 # Entrypoint
-ENTRYPOINT ["docker/scripts/bofhers_php_start.sh"]
+ENTRYPOINT ["bofhers_php_entrypoint.sh"]
