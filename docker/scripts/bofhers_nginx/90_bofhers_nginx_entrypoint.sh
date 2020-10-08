@@ -21,7 +21,7 @@ do
   then
     attempts="${OK_ATTEMPTS}"
   else
-    echo "Connection attempt to ${NGINX_FASTCGI_PASS} failed (#${attempts} of ${max_attempts}).."
+    echo "Connection attempt to ${NGINX_FASTCGI_PASS} failed (#${attempts} of ${max_attempts})."
   fi
 done
 
