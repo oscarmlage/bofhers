@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.2
+
+- `21ba7b9` Adds a version command to the bot
+
 ## 0.0.1
 
 - `bb206fc` Merge pull request #26 from hluaces/fix-issue-24
