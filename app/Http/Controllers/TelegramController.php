@@ -99,6 +99,13 @@ class TelegramController extends Controller
                 case $this->text === '!repo':
                     $this->sendMessage('https://github.com/oscarmlage/bofhers');
                     break;
+                case $this->text === '!stats':
+                    $all_quotes = count(Quote::where('chat_id', $this->chat_id)->get());
+                    $said_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', -1)->get());
+                    $not_said_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', 1)->get());
+                    $not_validated_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', 0)->get());
+                    $this->sendMessage('🔷️ All Quotes: <b>'.$all_quotes.'</b> 🤪️ Said Quotes: <b>'.$said_quotes.'</b> 🤫️ Not said quotes: <b>'.$not_said_quotes.'</b> 🔴️ Not validated yet: <b>'.$not_validated_quotes.'</b>', true);
+                    break;
                 // Save new quotes
                 case preg_match( '/^!addquote .*/', $this->text ) === 1:
                     $text = trim(str_replace('!addquote', '', $this->text));
