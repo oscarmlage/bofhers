@@ -82,6 +82,10 @@ class TelegramController extends Controller
                     $canal = Canal::where('chat_id', $this->chat_id)->first();
                     $this->sendMessage($canal->description ?? 'Léete el puto menú del canal para ver la descripción, ¡pedazo de vago oligofrénico!');
                     break;
+                case $this->text === '!version':
+                    $version = file_get_contents(base_path().'/VERSION', true);
+                    $this->sendMessage($version);
+                    break;
                 case $this->text === '!chatid':
                     $this->sendMessage($this->chat_id);
                     break;
