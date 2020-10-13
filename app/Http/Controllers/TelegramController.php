@@ -73,41 +73,55 @@ class TelegramController extends Controller
         $allowed_channels = Canal::where('active', 1)->pluck('chat_id')->toArray();
         if (in_array($this->chat_id, $allowed_channels)) {
 
-            switch ($this->text) {
-                case '/menutifu':
+            switch (true) {
+                case $this->text === '/menutifu':
                     $this->sendMessage('Aquí debería ir el menú con los comandos disponibles');
                     //$this->showMenu();
                     break;
-                case '!canal':
+                case $this->text === '!canal':
                     $canal = Canal::where('chat_id', $this->chat_id)->first();
-                    $this->sendMessage($canal->description);
+                    $this->sendMessage($canal->description ?? 'Léete el puto menú del canal para ver la descripción, ¡pedazo de vago oligofrénico!');
                     break;
-                case '!chatid':
+                case $this->text === '!version':
+                    $version = file_get_contents(base_path().'/VERSION', true);
+                    $this->sendMessage($version);
+                    break;
+                case $this->text === '!chatid':
                     $this->sendMessage($this->chat_id);
                     break;
-                case '!web':
+                case $this->text === '!web':
                     $canal = Canal::where('chat_id', $this->chat_id)->first();
-                    $this->sendMessage($canal->web);
+                    $this->sendMessage($canal->web ?? 'No hay web asociada, HOSTIA YA');
                     break;
-                case '!anclado':
+                case $this->text === '!anclado':
                     $this->sendMessage('¡El que tengo aquí colgado! 🍆');
                     break;
-                case '!repo':
+                case $this->text === '!repo':
                     $this->sendMessage('https://github.com/oscarmlage/bofhers');
                     break;
+                case $this->text === '!stats':
+                    $all_quotes = count(Quote::where('chat_id', $this->chat_id)->get());
+                    $said_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', -1)->get());
+                    $not_said_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', 1)->get());
+                    $not_validated_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', 0)->get());
+                    $this->sendMessage('🔷️ All Quotes: <b>'.$all_quotes.'</b> 🤪️ Said Quotes: <b>'.$said_quotes.'</b> 🤫️ Not said quotes: <b>'.$not_said_quotes.'</b> 🔴️ Not validated yet: <b>'.$not_validated_quotes.'</b>', true);
+                    break;
                 // Save new quotes
-                case ( preg_match( '/!addquote.*/', $this->text ) ? true : false ):
-                    if(trim(ltrim($this->text, '!addquote')) == '') {
+                case preg_match( '/^!addquote .*/', $this->text ) === 1:
+                    $text = trim(str_replace('!addquote', '', $this->text));
+
+                    if (empty($text)) {
                         $this->sendMessage('❌ Pezqueñines no, gracias... ¡hay que dejarlos crecer! 🤷');
                         break;
                     }
+
                     $data = [
                         'chat_id'=>$this->chat_id,
                         'nick'=>$this->username,
                         'first_name'=>$this->first_name,
                         'last_name'=>$this->last_name,
                         'telegram_user_id'=>$this->telegram_user_id,
-                        'quote'=>trim(ltrim($this->text, '!addquote')),
+                        'quote'=>$text,
                         'active'=>0,
                     ];
                     $quote = new Quote($data);
@@ -116,7 +130,7 @@ class TelegramController extends Controller
                     //$this->showMenu();
                     break;
                 // Random quote
-                case '!quote':
+                case $this->text === '!quote':
                     $quote = Quote::where('chat_id', $this->chat_id)->where('active', 1)->orderByRaw("RAND()")->limit(1)->first();
                     if($quote) {
                         $quote->active = -1;
@@ -130,7 +144,7 @@ class TelegramController extends Controller
                     }
                     break;
                 // Pesao de las AMI
-                case ( (preg_match( '/AMI.*/', $this->text ) ? true : false) && $this->telegram_user_id=='181121900'):
+                case preg_match( '/AMI.*/', $this->text ) === 1 && $this->telegram_user_id=='181121900':
                     $resource = fopen(public_path('/quotes/fifu.png'), 'r');
                     $filename = 'fifu.png';
                     $this->telegram->sendPhoto([
@@ -141,10 +155,10 @@ class TelegramController extends Controller
                     ]);
                     break;
                 // COVID COVAD
-                case ( preg_match( '/covid$/i', $this->text ) ? true : false ):
+                case preg_match( '/covid$/i', $this->text ) === 1:
                     $this->sendMessage('COVAD! Cada día te quiero mad covid covid.... 🎼🎵🎼🎵🎶');
                     break;
-                case '!help':
+                case $this->text === '!help':
                     $this->sendMessage('De momento sólo atiendo a: <code>!quote</code>, <code>!addquote texto</code>, <code>!anclado</code>, <code>!repo</code> y <code>!help</code>. De 8h. a 2h.', true);
                     break;
                 default:
