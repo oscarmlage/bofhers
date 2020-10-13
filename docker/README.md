@@ -20,21 +20,21 @@ If you also want to use the Telegram integration you'll also need:
 3. A Telegram _Group_ (**DO NOT** mistake it with a Telegram _Channel_).
 4. A Telegram bot and its API secret.
 
-Note that for the target use case, this document will be using CloudFlare to cover points `1` and `4` using your router's own public IP address as the site where your app will be hosted. Reasoning is simple: it works that way and at the moment of writing this I couldn't spend more time on this to add the Let's Encrypt container or Telegram's self-signed certificate integration. 
+Note that for the target use case, this document will be using CloudFlare to cover points `1` and `2` using your router's own public IP address as the site where your app will be hosted. Reasoning is simple: it works without any extra infra requirement and at the moment of writing this I couldn't spend more time on this to add the Let's Encrypt container or Telegram's self-signed certificate integration needed to make it more platform agnostic.
 
-Also most this document won't cover you if you want to deploy it in another way (for example: on a public instance or VPS server), _but_ the proccess should still be pretty straightforward, as you'll only need to tweak the docker-compose `.env` file to suit your deploy configuration.
+Also, bear in mind that most this document won't cover you if you want to deploy it in another way (for example: on a public instance or VPS server), _but_ the proccess should still be pretty straightforward, as you'll only need to tweak your `./docker/.env` file to suit your needs.
 
 # How does it work?
 
 Start by cloning the repository and navigating into the `./docker` directory.
 
-In there you'll find the `./docker/.env.example` file which contains every aspect of the application that can be configured. Copy the file to `./docker/.env` and edit it to suit your needs. The file itself is documented and straightforward.
+In there you'll find the `./docker/.env.example` file which contains every aspect of the application that can be configured. Copy the file to `./docker/.env` and edit it to suit your needs. The file itself is documented and straightforward. **DO NOT** mistake this _envfile_ with the application's own _envfile_; `./env` and `./docker/.env` are different files used for different things.
 
-The defaults on the file are sane so most likely you won't need to change anything but the Telegram credentials that you need to input.
+The defaults on the file are sane so most likely you won't need to change anything but the Telegram credentials and URLs.
 
 Speaking of Telegram, if you need help to configure its integration read the section "_Setting up Telegram_" below. Do this **before** starting the application.
  
-Once the file has been configured (**including** Telegram's parameters) simply do a `docker-compose up` to start the application.
+Once the file has been configured (**including** Telegram's parameters) simply do a `docker-compose up --build` to start the application.
 
 # Setting up Telegram
 
@@ -42,13 +42,13 @@ The following sections explain how to set up the Telegram integration, which you
 
 ## Setting up an A record
 
-The quickest (and _dirtiest_) way to make the application work without using any VPS or public instance revolves around using your own router's public IP address to host the application.
+The quickest (and _dirtiest_) way to make the application work without using any VPS or public instance revolves around using your own router's public IP address to host the application. Depending on your setup, you might need to forward the HTTP and HTTPS traffic to the machine where you host the application.
 
 To make it work you'll need to [register at CloudFlare](https://www.cloudflare.com/), add a domain there and create a subdomain that points to your router's public IP address. It doesn't matter if it changes as you'll be able to modify the CloudFlare's A record whenever you need to.
 
-Once you're registered, add a domain to CF's dashboard and create an A record pointing to wherever you need. Make sure that the entry is allowed to go through CloudFlare's proxy server (the "_orange cloud_" just by the entry on the dashboard).
+Once you're registered, add a domain to CloudFlare's dashboard and create an A record pointing to wherever you need. Make sure that the entry is allowed to go through CloudFlare's proxy server (the "_orange cloud_" just by the entry on the dashboard).
 
-As this is done, you'll need to add your subdomain's URL to your `docker/.env` file under the `BOFHERS_TELEGRAM_WEBHOOK_URL` setting. Mind that you'll need the URL to start with `https://` and to end with a trailing slash (`/`).
+As this is done, you'll need to add your subdomain's URL to your `./docker/.env` file under the `BOFHERS_TELEGRAM_WEBHOOK_URL` setting. Mind that you'll need the URL to start with `https://` and to end with a trailing slash (`/`).
 
 Luckily enough, CloudFlare also offers the possibility to add an SSL termination to your subdomain. As we'll need one to work with Telegram, be sure to set it up as "_Flexible_" encryption type on CloudFlare.
 
@@ -70,7 +70,7 @@ You can find more information on Telegram's official documentation regarding bot
 
 This process is pretty straightforward. Simply create a Telegram Group (**NOT** a Telegram Channel) by using the application itself. Once it has been created, invite your bot and grant it enough permissions to read all the incoming messages.
 
-After this, you'll need to figure out the Group's `chat_id`. The easiest way to do this is to invite `@RawDataBot` to your channel. Upon its first entry to the channel, the bot will give you internal details about the information. Once it has fulfilled its purpose you can remove it from the channel. Be sure to note down the `chat_id` for your Group, which you'll need later on.
+After this, you'll need to figure out the Group's `chat_id`. The easiest way to do this is to invite `@RawDataBot` to your channel. Upon its first entry to the channel, the bot will give you internal details about the Group. Once it has fulfilled its purpose you can remove it from the channel. Be sure to note down the `chat_id` for your Group, which you'll need later on.
 
 ## Setting up the application
 
