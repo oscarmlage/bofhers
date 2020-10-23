@@ -1,0 +1,52 @@
+version: "3.1"
+
+networks:
+  default:
+    name: bofhers_network
+    driver: bridge
+
+services:
+  database:
+    image: mysql
+    container_name: bofhers_mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${BOFHERS_DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${BOFHERS_DATABASE}
+      - MYSQL_USER=${BOFHERS_DB_USERNAME}
+      - MYSQL_PASSWORD=${BOFHERS_DB_PASSWORD}
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-bofhers_php
+      args:
+        - PHP_VERSION=${BOFHERS_PHP_VERSION}
+        - PHP_USER=${BOFHERS_PHP_USER}
+        - PHP_UID=${BOFHERS_PHP_UID}
+        - PHP_WORKDIR=${BOFHERS_APP_WORKDIR}
+    image: bofhers_php
+    container_name: bofhers_php
+    volumes:
+      - "..:${BOFHERS_APP_WORKDIR}"
+    depends_on:
+      - database
+
+  web:
+    image: nginx
+    container_name: bofhers_nginx
+    volumes:
+      - "./templates:/etc/nginx/templates"
+      - "..:${BOFHERS_APP_WORKDIR}"
+      - "./scripts/wait_for_it.sh:/usr/local/bin/wait_for_it.sh"
+      - "./scripts/bofhers_nginx/90_bofhers_nginx_entrypoint.sh:/docker-entrypoint.d/90_bofhers_nginx_entrypoint.sh"
+    environment:
+      - NGINX_PORT=${BOFHERS_NGINX_PORT}
+      - NGINX_SERVER_NAME=${BOFHERS_NGINX_SERVER_NAME}
+      - NGINX_ROOT=${BOFHERS_NGINX_ROOT}
+      - NGINX_FASTCGI_PASS=${BOFHERS_NGINX_CGI_PROXY}
+    ports:
+      - "${BOFHERS_LOCAL_BIND_PORT}:${BOFHERS_APP_PORT}"
+    depends_on:
+      - app
