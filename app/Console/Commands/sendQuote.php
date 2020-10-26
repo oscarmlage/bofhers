@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Telegram\Bot\Api as Telegram;
 
-use \App\Models\Category;
 use \App\Models\Quote;
 use \App\Models\TelegramCanal;
 
@@ -45,31 +44,25 @@ class sendQuote extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
      */
     public function handle()
     {
         $canal = $this->argument('canal');
         $tag = $this->argument('tag');
-
         $canales = TelegramCanal::where('active', 1)->get();
         if($canal) {
             $canales = TelegramCanal::where('name', "#".$canal)->where('active', 1)->get();
         }
 
         foreach($canales as $canal){
-            $this->chat_id = $canal->chat_id;
-            $quote = Quote::where('chat_id', $this->chat_id)->where('active', 1)->orderByRaw("RAND()")->limit(1)->first();
-            if($tag) {
-                $tag = Category::where('slug', $tag)->first();
-                $quote = $tag->quotes()->where('chat_id', $this->chat_id)->where('active', 1)->orderByRaw("RAND()")->limit(1)->first();
-            }
+            $quote = Quote::getAndMarkRandomQuoteText($canal->chat_id, $tag ?? null);
 
             $data = [
-                'chat_id' => $this->chat_id,
+                'chat_id' => $canal->chat_id,
                 'parse_mode' => 'HTML',
-                'text' => $quote->quote,
+                'text' => $quote,
             ];
+
             $this->telegram->sendMessage($data);
         }
 
