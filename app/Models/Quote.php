@@ -42,25 +42,27 @@ class Quote extends Model
     }
 
     /**
-     * Given an arbitrary chat id, searchs for a random quote that matchs the
-     * given ID and is marked as "not yet said".
+     * Given an arbitrary chat_id and category_slug, searchs for a random quote
+     * that matchs the given criteria and has an active value of
+     * QUOTE_STATUS_NOT_YET_SAID.
      *
-     * If there is such a quote, it will be marked as "already said" and
-     * returned.
+     * In case there's not a quote with the criteria and that status, all of
+     * the quotes that have a status of QUOTE_STATUS_ALREADY_SAID will be set
+     * to QUOTE_STATUS_NOT_YET_SAID and an informative string message will be
+     * returned as the quote.
      *
-     * If there's no such quote, all of the "already seen quotes" will be marked
-     * as unseen and an informative text will be returned.
-     *
-     * In case there's no valid quotes (seen or unseen) an error message will
-     * be returned.
+     * If there are errors (no quotes found or no such category slug) an
+     * informative error will be returned as a quote.
      *
      * @param string      $chat_id       The chat id to which the quote must
-     *                                   belong to
+     *                                   belong to.
      * @param string|null $category_slug The category slug to which the quote
      *                                   must belong to. If null, it will be
      *                                   ignored.
      *
-     * @return string
+     * @return string                    The text of the quote, or an
+     *                                   informative status message if something
+     *                                   went wrong.
      */
     public static function getAndMarkRandomQuoteText(
         string $chat_id,
