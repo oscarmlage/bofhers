@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use function GuzzleHttp\Promise\all;
 
 class Quote extends Model
 {
@@ -66,28 +68,35 @@ class Quote extends Model
         string $chat_id,
         string $category_slug = null
     ): string {
+        if (! $category = Category::where('slug', $category_slug)->first() ) {
+            return '404: category not found';
+        }
+
         /**
          * Returns an Eloquent builder that selects all quotes for the passed
          * chat id, category id (if defined) that are validated.
          *
          * @returns Builder
          */
-        $_quoteBuilder = function () use ($chat_id, $category_slug) {
-            if ( ! is_null($category_slug)) {
-                $category = Category::where('slug', $category_slug)->first();
-                $builder  = $category->quotes->where('chat_id', $chat_id);
+        $_quoteBuilder = function () use ($chat_id, $category) {
+            if ( ! is_null($category)) {
+                $ids  = $category->quotes
+                        ->where('chat_id', $chat_id)
+                        ->map(function($item, $key) {
+                            return $item->id;
+                        });
+                $builder = static::whereIn('id', $ids);
             } else {
                 $builder = static::where('chat_id', $chat_id);
             }
-
-            $builder = $builder->where(
-                'active', '<>', Quote::QUOTE_STATUS_NOT_VALIDATED);
 
             return $builder;
         };
 
         // Sanity check for quotes on the given chat id + category
-        if ($_quoteBuilder()->get()->count() == 0) {
+        if ($_quoteBuilder()
+                ->where('active', '<>', Quote::QUOTE_STATUS_NOT_VALIDATED)
+                ->count() == 0) {
             return '404: quote not found';
         }
 
@@ -113,10 +122,8 @@ class Quote extends Model
          * fact.
          */
         $_quoteBuilder()
-            ->where('active', '=',
-                static::QUOTE_STATUS_ALREADY_SAID)
-            ->update(['active' => static::QUOTE_STATUS_NOT_YET_SAID]);
-
+                ->where('active', static::QUOTE_STATUS_ALREADY_SAID)
+                ->update(['active' => static::QUOTE_STATUS_NOT_YET_SAID]);
         return 'Pasamos de fase, quotes reiniciados, nivel DOS';
     }
 
@@ -125,9 +132,11 @@ class Quote extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function categories() {
+    public function categories()
+    {
         return $this->belongsToMany(
-            'App\Models\Category', 'quotes_categories', 'quote_id', 'category_id'
+            'App\Models\Category', 'quotes_categories', 'quote_id',
+            'category_id'
         );
     }
 
