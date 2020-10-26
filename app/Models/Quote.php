@@ -68,8 +68,13 @@ class Quote extends Model
         string $chat_id,
         string $category_slug = null
     ): string {
-        if (! $category = Category::where('slug', $category_slug)->first() ) {
-            return '404: category not found';
+        $category = null;
+
+        if ( ! is_null($category_slug) ) {
+            if ( ! $category = Category::where('slug', $category_slug)
+                                       ->first()) {
+                return '404: category not found';
+            }
         }
 
         /**
