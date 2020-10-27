@@ -79,7 +79,7 @@ class Quote extends Model
 
         /**
          * Returns an Eloquent builder that selects all quotes for the passed
-         * chat id, category id (if defined) that are validated.
+         * chat id and category id (if defined)
          *
          * @returns Builder
          */
