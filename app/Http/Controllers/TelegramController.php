@@ -42,7 +42,6 @@ class TelegramController extends Controller
         return $response == true ? "removed" : dd($response);
     }
 
-
     public function handleRequest(Request $request)
     {
         $this->chat_id = isset($request['message']['chat']['id']) ? $request['message']['chat']['id'] : 0;
@@ -101,9 +100,9 @@ class TelegramController extends Controller
                     break;
                 case $this->text === '!stats':
                     $all_quotes = count(Quote::where('chat_id', $this->chat_id)->get());
-                    $said_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', -1)->get());
-                    $not_said_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', 1)->get());
-                    $not_validated_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', 0)->get());
+                    $said_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', Quote::QUOTE_STATUS_ALREADY_SAID)->get());
+                    $not_said_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', Quote::QUOTE_STATUS_NOT_YET_SAID)->get());
+                    $not_validated_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', Quote::QUOTE_STATUS_NOT_VALIDATED)->get());
                     $this->sendMessage('🔷️ All Quotes: <b>'.$all_quotes.'</b> 🤪️ Said Quotes: <b>'.$said_quotes.'</b> 🤫️ Not said quotes: <b>'.$not_said_quotes.'</b> 🔴️ Not validated yet: <b>'.$not_validated_quotes.'</b>', true);
                     break;
                 // Save new quotes
@@ -122,27 +121,21 @@ class TelegramController extends Controller
                         'last_name'=>$this->last_name,
                         'telegram_user_id'=>$this->telegram_user_id,
                         'quote'=>$text,
-                        'active'=>0,
+                        'active'=>Quote::QUOTE_STATUS_NOT_VALIDATED,
                     ];
                     $quote = new Quote($data);
                     $quote->save();
                     $this->sendMessage('✅ Quote agregado... ¡y lo llevo aquí colgado!');
                     //$this->showMenu();
                     break;
+
                 // Random quote
                 case $this->text === '!quote':
-                    $quote = Quote::where('chat_id', $this->chat_id)->where('active', 1)->orderByRaw("RAND()")->limit(1)->first();
-                    if($quote) {
-                        $quote->active = -1;
-                        $quote->save();
-                    }
-                    if(Quote::where('chat_id', $this->chat_id)->where('active', 1)->count() == 0) {
-                        Quote::where('active', '=', -1)->update(array('active' => 1));
-                        $this->sendMessage('Pasamos de fase, quotes reiniciados, nivel DOS');
-                    } else {
-                        $this->sendMessage($quote->quote);
-                    }
+                    $this->sendMessage(
+                        Quote::getAndMarkRandomQuoteText($this->chat_id)
+                    );
                     break;
+
                 // Pesao de las AMI
                 case preg_match( '/AMI.*/', $this->text ) === 1 && $this->telegram_user_id=='181121900':
                     $resource = fopen(public_path('/quotes/fifu.png'), 'r');
