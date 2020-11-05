@@ -59,10 +59,6 @@ class TelegramController extends Controller
         if (in_array($this->chat_id, $allowed_channels)) {
 
             switch (true) {
-                case $this->text === '/menutifu':
-                    $this->sendMessage('Aquí debería ir el menú con los comandos disponibles');
-                    //$this->showMenu();
-                    break;
                 case $this->text === '!canal':
                     $canal = Canal::where('chat_id', $this->chat_id)->first();
                     $this->sendMessage($canal->description ?? 'Léete el puto menú del canal para ver la descripción, ¡pedazo de vago oligofrénico!');
@@ -77,12 +73,6 @@ class TelegramController extends Controller
                 case $this->text === '!web':
                     $canal = Canal::where('chat_id', $this->chat_id)->first();
                     $this->sendMessage($canal->web ?? 'No hay web asociada, HOSTIA YA');
-                    break;
-                case $this->text === '!anclado':
-                    $this->sendMessage('¡El que tengo aquí colgado! 🍆');
-                    break;
-                case $this->text === '!repo':
-                    $this->sendMessage('https://github.com/oscarmlage/bofhers');
                     break;
                 case $this->text === '!stats':
                     $all_quotes = count(Quote::where('chat_id', $this->chat_id)->get());
@@ -117,9 +107,10 @@ class TelegramController extends Controller
 
                 // Random quote
                 case $this->text === '!quote':
-                    $this->sendMessage(
-                        Quote::getAndMarkRandomQuoteText($this->chat_id)
-                    );
+                case $this->text === '!anclado':
+                case $this->text === '!repo':
+                    $cmd = substr($this->text, 1);
+                    $this->sendMessage("!${cmd} está deprecated. Pásate a /${cmd} o RTFM con /help");
                     break;
 
                 // Pesao de las AMI

@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Telegram\Commands\Anclado;
+use App\Http\Controllers\Telegram\Commands\Help;
 use App\Http\Controllers\Telegram\Commands\Quote;
+use App\Http\Controllers\Telegram\Commands\Repo;
 
 return [
     /*
@@ -41,7 +44,9 @@ return [
             'webhook_url'         => env('TELEGRAM_WEBHOOK_URL', 'YOUR-BOT-WEBHOOK-URL'),
             'commands'            => [
                 Quote::class,
-                //Acme\Project\Commands\MyTelegramBot\BotCommand::class
+                Help::class,
+                Repo::class,
+                Anclado::class
             ],
         ],
 
