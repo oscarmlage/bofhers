@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Telegram\Commands;
 
 use App\Models\TelegramCanal;
-use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Commands\Command;
 use App\Models\Quote as QuoteModel;
 
@@ -69,6 +68,6 @@ final class Quote extends Command
         $arguments = $this->getArguments();
         $text      = QuoteModel::getAndMarkRandomQuoteText($chatId,
             $arguments['category'] ?? null);
-        $this->replyWithMessage(['text' => $text . " " . $chatId]);
+        $this->replyWithMessage(['text' => $text]);
     }
 }
