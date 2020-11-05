@@ -14,12 +14,9 @@ class TelegramController extends Controller
 {
     protected $telegram;
 
-    public function __construct()
+    public function __construct(Telegram $telegram)
     {
-        //$this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
-        $this->telegram = new Telegram(
-            env('TELEGRAM_BOT_TOKEN')
-        );
+        $this->telegram = $telegram;
     }
 
     public function getMe()
@@ -28,22 +25,10 @@ class TelegramController extends Controller
         return $response;
     }
 
-    public function setWebHook()
-    {
-        $url = env('TELEGRAM_WEBHOOK_URL') . env('TELEGRAM_WEBHOOK_KEY') . '/webhook';
-        $response = $this->telegram->setWebhook(['url' => $url]);
-
-        return $response == true ? "ok" : dd($response);
-    }
-
-    public function removeWebHook()
-    {
-        $response = $this->telegram->removeWebhook();
-        return $response == true ? "removed" : dd($response);
-    }
-
     public function handleRequest(Request $request)
     {
+        $update = $this->telegram->commandsHandler(true);
+
         $this->chat_id = isset($request['message']['chat']['id']) ? $request['message']['chat']['id'] : 0;
         $this->username = isset($request['message']['from']['username']) ? $request['message']['from']['username'] : 'no-username';
         $this->first_name = isset($request['message']['from']['first_name']) ? $request['message']['from']['first_name'] : 'no-first-name';
@@ -66,6 +51,7 @@ class TelegramController extends Controller
             'request'=>$request
         ];
         $tel = new Tel($data);
+
         $tel->save();
 
         // Allow commands only in oficial channels (not privates)

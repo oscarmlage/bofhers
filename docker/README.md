@@ -82,8 +82,6 @@ Once all the containers are done starting, you should be able to access the appl
  
 When you log in you'll need to set up your Telegram's Group in the admin interface. Click on "_Telegram, canales_" on the left menu and then "_Add telegram_canal_". In the form that will show up you'll need to add your Group's data, **make sure to mark it as Active**.
 
-After this, check your `docker/.env` file and concatenate the values of the `BOFHERS_TELEGRAM_WEBHOOK_URL` and the `BOFHERS_TELEGRAM_WEBHOOK_KEY` entry. This should result in an URL such as `https://subdomain.example.com/zZSTlKMRsoGwX37pp2NjCZnuLEbyDlTh1`. Append to it the suffix `/set-hook` and visit the URL in your browser. If all went well a single "ok" should be rendered in your screen and your bot is now ready to reply commands.
-
 # How do I rebuild the dev environment?
 
 If for any reason you think you messed up and want to start over, simply:

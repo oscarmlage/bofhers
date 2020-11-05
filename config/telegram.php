@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Telegram\Commands\Quote;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -32,12 +34,13 @@ return [
     |             ]
     */
     'bots'                         => [
-        'mybot' => [
+        'tifu' => [
             'username'            => 'TifuBot',
             'token'               => env('TELEGRAM_BOT_TOKEN', 'YOUR-BOT-TOKEN'),
-            'certificate_path'    => env('TELEGRAM_CERTIFICATE_PATH', 'YOUR-CERTIFICATE-PATH'),
+            'certificate_path'    => env('TELEGRAM_CERTIFICATE_PATH', null),
             'webhook_url'         => env('TELEGRAM_WEBHOOK_URL', 'YOUR-BOT-WEBHOOK-URL'),
             'commands'            => [
+                Quote::class,
                 //Acme\Project\Commands\MyTelegramBot\BotCommand::class
             ],
         ],
@@ -57,7 +60,7 @@ return [
     | your default bot for regular use.
     |
     */
-    'default'                      => 'mybot',
+    'default'                      => 'tifu',
 
     /*
     |--------------------------------------------------------------------------
@@ -116,7 +119,7 @@ return [
     |
     */
     'commands'                     => [
-        Telegram\Bot\Commands\HelpCommand::class,
+
     ],
 
     /*

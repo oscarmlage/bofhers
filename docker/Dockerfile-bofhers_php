@@ -21,7 +21,7 @@ COPY ./scripts/bofhers_php/bofhers_php_entrypoint.sh /usr/local/bin
 # PHP user permissions
 RUN useradd -G www-data,root -u ${PHP_UID} -d /home/${PHP_USER} ${PHP_USER}
 RUN mkdir -p /home/${PHP_USER}/.composer && \
-    chown -R ${PHP_USER}: /home/${PHP_USER}
+    chown -R ${PHP_USER}: /home/${PHP_USER}/
 
 # User workdir
 WORKDIR ${PHP_WORKDIR}

@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Telegram\Bot\Api as Telegram;
-
 use \App\Models\Quote;
 use \App\Models\TelegramCanal;
 
@@ -38,6 +37,7 @@ class sendQuote extends Command
         $this->telegram = new Telegram(
             env('TELEGRAM_BOT_TOKEN')
         );
+
         parent::__construct();
     }
 
