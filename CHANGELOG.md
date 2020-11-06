@@ -2,18 +2,31 @@
 
 ## ?????
 
+### Breaking changes
+
 - `b5bef60` **BREAKING CHANGE** Added the `TELEGRAM_WEBHOOK_ROUTE` key to the `.env.example` file. This value will define the route used for the webhook. Read the file for details. After changing it, it is recommended to regenerate the webhook (`php artisan telegram:webhook --setup --all`).  
-- `b5bef60` **BREAKING CHANGE** The `TELEGRAM_WEBHOOK_URL` key on the envfile should reflect the route used by the `TELEGRAM_WEBHOOK_ROUTE` env value.
+- `b5bef60` **BREAKING CHANGE** The `TELEGRAM_WEBHOOK_URL` key on the `.env` file should reflect the route used by the `TELEGRAM_WEBHOOK_ROUTE` env value.
 - `b5bef60` Deleted the `BOFHERS_TELEGRAM_WEBHOOK_KEY` key. `TELEGRAM_WEBHOOK_ROUTE` is the substitute for webhook obfuscation.
+
+Update instructions:
+
+1. Replace all the `TELEGRAM_*` variables in the `.env` file with those from the `.env.example` file. 
+2. Fill them accordingly to whatever the needs are.
+3. Regenerate the webhook endpoint: `php artisan telegram:webhook --setup --all`.
+4. Register the bot's commands: `php artisan telegram:registerBotCommands`.
+
+### New features
+
+- `d6f272e` Adapted all the `!commands` to Telegram's command API which uses `/` (fixes #32).
+- `b5bef60` Added the artisan command `telegram:registerBotCommands` to integrate the bot into Telegram's commands API (see #32).
+- `b5bef60` Modified the docker testing environment and documentation to auto register webhook and bot commands (see #32).
+
+### Fixes and refactors 
+
+- `b5bef60` Removed the `/set-webhook` and `/del-webhook` routes. Added the artisan command `telegram:webhook` to manage the webhook (fixes #13).
 - `b5bef60` Removed the `/random` route.
-- `b5bef60` Removed the `/set-webhook` and `/del-webhook` routes. 
-- `b5bef60` Added the artisan command `telegram:webhook` to manage the webhook (see command's help for details).
-- `b5bef60` Added the artisan command `telegram:registerBotCommands` to integrate the bot into Telegram's commands API.
-- `b5bef60` Modified the docker testing environment and documentation to auto register webhook and bot commands.
-- `b5bef60` Adapted the `!quote` command so that it uses the Telegram's command api (`/quote` or `/quote {tag}`).
-- `b7b681a` Adapted the `!repo`, `!help` and `!anclado` so that they use the Telegram's command api (replace `!` with `/`).  
 - `b5bef60` Refactored a few instances of code so that the Telegram service is instantiated via dependency injection instead of using it manually (this is required so that it reads the full configuration on the `config/telegram.php` file).
-- `b5bef60` Tweaked a few values on the `config/telegram.php` file to enable commands and proper webhook registration. 
+- `b5bef60` Tweaked a few values on the `config/telegram.php` file to enable commands and proper webhook registration.
 
 ## 0.0.2
 
