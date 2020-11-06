@@ -59,57 +59,17 @@ class TelegramController extends Controller
         if (in_array($this->chat_id, $allowed_channels)) {
 
             switch (true) {
-                case $this->text === '!canal':
-                    $canal = Canal::where('chat_id', $this->chat_id)->first();
-                    $this->sendMessage($canal->description ?? 'Léete el puto menú del canal para ver la descripción, ¡pedazo de vago oligofrénico!');
-                    break;
-                case $this->text === '!version':
-                    $version = file_get_contents(base_path().'/VERSION', true);
-                    $this->sendMessage($version);
-                    break;
-                case $this->text === '!chatid':
-                    $this->sendMessage($this->chat_id);
-                    break;
-                case $this->text === '!web':
-                    $canal = Canal::where('chat_id', $this->chat_id)->first();
-                    $this->sendMessage($canal->web ?? 'No hay web asociada, HOSTIA YA');
-                    break;
-                case $this->text === '!stats':
-                    $all_quotes = count(Quote::where('chat_id', $this->chat_id)->get());
-                    $said_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', Quote::QUOTE_STATUS_ALREADY_SAID)->get());
-                    $not_said_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', Quote::QUOTE_STATUS_NOT_YET_SAID)->get());
-                    $not_validated_quotes = count(Quote::where('chat_id', $this->chat_id)->where('active', Quote::QUOTE_STATUS_NOT_VALIDATED)->get());
-                    $this->sendMessage('🔷️ All Quotes: <b>'.$all_quotes.'</b> 🤪️ Said Quotes: <b>'.$said_quotes.'</b> 🤫️ Not said quotes: <b>'.$not_said_quotes.'</b> 🔴️ Not validated yet: <b>'.$not_validated_quotes.'</b>', true);
-                    break;
-                // Save new quotes
+                // Deprecated commands (they all now use the same verb but starting with a "/")
                 case preg_match( '/^!addquote .*/', $this->text ) === 1:
-                    $text = trim(str_replace('!addquote', '', $this->text));
-
-                    if (empty($text)) {
-                        $this->sendMessage('❌ Pezqueñines no, gracias... ¡hay que dejarlos crecer! 🤷');
-                        break;
-                    }
-
-                    $data = [
-                        'chat_id'=>$this->chat_id,
-                        'nick'=>$this->username,
-                        'first_name'=>$this->first_name,
-                        'last_name'=>$this->last_name,
-                        'telegram_user_id'=>$this->telegram_user_id,
-                        'quote'=>$text,
-                        'active'=>Quote::QUOTE_STATUS_NOT_VALIDATED,
-                    ];
-                    $quote = new Quote($data);
-                    $quote->save();
-                    $this->sendMessage('✅ Quote agregado... ¡y lo llevo aquí colgado!');
-                    //$this->showMenu();
-                    break;
-
-                // Random quote
+                case $this->text === '!stats':
+                case $this->text === '!chatid':
+                case $this->text === '!canal':
                 case $this->text === '!quote':
                 case $this->text === '!anclado':
                 case $this->text === '!repo':
-                    $cmd = substr($this->text, 1);
+                case $this->text === '!help':
+                case $this->text === '!version':
+                    $cmd = substr(explode(' ',$this->text)[0], 1);
                     $this->sendMessage("!${cmd} está deprecated. Pásate a /${cmd} o RTFM con /help");
                     break;
 
@@ -127,9 +87,6 @@ class TelegramController extends Controller
                 // COVID COVAD
                 case preg_match( '/covid$/i', $this->text ) === 1:
                     $this->sendMessage('COVAD! Cada día te quiero mad covid covid.... 🎼🎵🎼🎵🎶');
-                    break;
-                case $this->text === '!help':
-                    $this->sendMessage('De momento sólo atiendo a: <code>!quote</code>, <code>!addquote texto</code>, <code>!anclado</code>, <code>!repo</code> y <code>!help</code>. De 8h. a 2h.', true);
                     break;
                 default:
             }

@@ -1,0 +1,31 @@
+<?php
+
+
+namespace App\Http\Controllers\Telegram\Commands;
+
+/**
+ * Comando para mostrar la web asociada al canal en el que se invoque.
+ *
+ * @package App\Http\Controllers\Telegram\Commands
+ */
+final class Web extends AbstractCommand
+{
+
+    protected $name = 'web';
+    protected $description = 'Muestra la web asociada al canal.';
+
+    public function handle()
+    {
+        if ( ! $this->isValidChannel()) {
+            return;
+        }
+
+        if ( ! $canal = $this->getChannel()) {
+            return;
+        }
+
+        $this->replyWithMessage(([
+            'text' => $canal->web ?? 'No hay web asociada, HOSTIA YA.',
+        ]));
+    }
+}

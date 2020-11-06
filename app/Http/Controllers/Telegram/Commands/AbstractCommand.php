@@ -16,6 +16,27 @@ abstract class AbstractCommand extends Command
 {
 
     /**
+     * Returns the TelegramCanal object associated with the chat ID given
+     * in the Telegram's update that triggered this command and is properly
+     * enabled in the application's database.
+     *
+     * If none can be found null will be returned.
+     *
+     * @return \App\Models\TelegramCanal|null
+     */
+    protected function getChannel(): ?TelegramCanal
+    {
+        if ( ! $id = $this->getChatId()) {
+            return null;
+        }
+
+        return TelegramCanal::where([
+            ['chat_id', '=', $id],
+            ['active', '=', 1],
+        ])->first();
+    }
+
+    /**
      * Queries the underlying update that triggered the comand's execution and
      * tries to find the chat ID that originated it.
      *

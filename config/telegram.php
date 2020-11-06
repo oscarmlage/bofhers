@@ -1,9 +1,15 @@
 <?php
 
+use App\Http\Controllers\Telegram\Commands\AddQuote;
 use App\Http\Controllers\Telegram\Commands\Anclado;
+use App\Http\Controllers\Telegram\Commands\Canal;
+use App\Http\Controllers\Telegram\Commands\ChatId;
 use App\Http\Controllers\Telegram\Commands\Help;
 use App\Http\Controllers\Telegram\Commands\Quote;
 use App\Http\Controllers\Telegram\Commands\Repo;
+use App\Http\Controllers\Telegram\Commands\Stats;
+use App\Http\Controllers\Telegram\Commands\Version;
+use App\Http\Controllers\Telegram\Commands\Web;
 
 return [
     /*
@@ -38,22 +44,29 @@ return [
     */
     'bots'                         => [
         'tifu' => [
-            'username'            => 'TifuBot',
-            'token'               => env('TELEGRAM_BOT_TOKEN', 'YOUR-BOT-TOKEN'),
-            'certificate_path'    => env('TELEGRAM_CERTIFICATE_PATH', null),
-            'webhook_url'         => env('TELEGRAM_WEBHOOK_URL', 'YOUR-BOT-WEBHOOK-URL'),
-            'commands'            => [
-                Quote::class,
+            'username'         => 'TifuBot',
+            'token'            => env('TELEGRAM_BOT_TOKEN', 'YOUR-BOT-TOKEN'),
+            'certificate_path' => env('TELEGRAM_CERTIFICATE_PATH', null),
+            'webhook_url'      => env('TELEGRAM_WEBHOOK_URL',
+                'YOUR-BOT-WEBHOOK-URL'),
+            'commands'         => [
+                AddQuote::class,
+                Anclado::class,
+                Canal::class,
+                ChatId::class,
                 Help::class,
+                Quote::class,
                 Repo::class,
-                Anclado::class
+                Stats::class,
+                Version::class,
+                Web::class,
             ],
         ],
 
-//        'mySecondBot' => [
-//            'username'  => 'AnotherTelegram_Bot',
-//            'token' => '123456:abc',
-//        ],
+        //        'mySecondBot' => [
+        //            'username'  => 'AnotherTelegram_Bot',
+        //            'token' => '123456:abc',
+        //        ],
     ],
 
     /*
