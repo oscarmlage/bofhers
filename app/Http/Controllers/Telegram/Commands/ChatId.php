@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 final class ChatId extends AbstractCommand
 {
 
+    protected $hidden = true;
     protected $name = 'chatid';
     protected $description = 'Muestra el ID telegram para el canal';
 

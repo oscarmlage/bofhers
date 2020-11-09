@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Telegram\Commands;
 final class Version extends AbstractCommand
 {
 
+    protected $hidden = true;
     protected $name = 'version';
     protected $description = 'Muestra la versión del bot y herramienta.';
 

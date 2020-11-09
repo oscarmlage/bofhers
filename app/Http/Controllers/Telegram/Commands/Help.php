@@ -29,7 +29,14 @@ final class Help extends AbstractCommand
         $commands = $this->getTelegram()->getCommands();
         $response = '';
 
+        /**
+         * @var $command AbstractCommand
+         */
         foreach ($commands as $name => $command) {
+            if ($command->isHidden()) {
+                continue;
+            }
+
             $response .= sprintf('/%s - %s' . PHP_EOL, $name,
                 $command->getDescription());
         }

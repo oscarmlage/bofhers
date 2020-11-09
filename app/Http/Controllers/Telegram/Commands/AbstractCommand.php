@@ -14,7 +14,11 @@ use Telegram\Bot\Commands\Command;
  */
 abstract class AbstractCommand extends Command
 {
-
+    /**
+     * Hidden commands won't be shown on the /help command
+     * @var bool
+     */
+    protected $hidden = false;
     /**
      * Returns the TelegramCanal object associated with the chat ID given
      * in the Telegram's update that triggered this command and is properly
@@ -72,5 +76,14 @@ abstract class AbstractCommand extends Command
         ])->first();
 
         return ! empty($canal);
+    }
+
+    /**
+     * Returns true if the command shouldn't be shown on the /help command
+     * @return bool
+     */
+    protected function isHidden(): bool
+    {
+        return $this->hidden;
     }
 }
