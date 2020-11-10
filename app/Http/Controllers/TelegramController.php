@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Api as Telegram;
 use Telegram\Bot\FileUpload\InputFile;
 
 use \App\Models\Telegram as Tel;
 use \App\Models\TelegramCanal as Canal;
-use \App\Models\Quote as Quote;
+use Throwable;
 
 class TelegramController extends Controller
 {
@@ -27,8 +28,6 @@ class TelegramController extends Controller
 
     public function handleRequest(Request $request)
     {
-        $update = $this->telegram->commandsHandler(true);
-
         $this->chat_id = isset($request['message']['chat']['id']) ? $request['message']['chat']['id'] : 0;
         $this->username = isset($request['message']['from']['username']) ? $request['message']['from']['username'] : 'no-username';
         $this->first_name = isset($request['message']['from']['first_name']) ? $request['message']['from']['first_name'] : 'no-first-name';
@@ -51,8 +50,22 @@ class TelegramController extends Controller
             'request'=>$request
         ];
         $tel = new Tel($data);
-
         $tel->save();
+
+        try {
+            $this->telegram->commandsHandler(true);
+        }
+        catch (Throwable $e) {
+            Log::error(
+                $e->getMessage() . PHP_EOL . $e->getTraceAsString()
+            );
+            $this->sendMessage(
+                '❌ Alerta marrón. El despliegue ha salido octarino y ' .
+                'he petado.'
+            );
+            return;
+        }
+
 
         // Allow commands only in oficial channels (not privates)
         $allowed_channels = Canal::where('active', 1)->pluck('chat_id')->toArray();
@@ -91,18 +104,6 @@ class TelegramController extends Controller
                 default:
             }
         }
-    }
-
-    public function random(Request $request)
-    {
-        $this->chat_id = "-1001168258122";
-        $quote = Quote::where('chat_id', $this->chat_id)->where('active', 1)->orderByRaw("RAND()")->limit(1)->first();
-        if($quote) {
-            echo"we";
-        } else {
-            echo "nas";
-        }
-        dd($quote);
     }
 
     public function showMenu($info = null)

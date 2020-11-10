@@ -6,7 +6,6 @@ use App\Models\Category;
 use \App\Models\Quote;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
-use Throwable;
 
 /**
  * Command that adds a random quote to the list of the current channel.
@@ -195,37 +194,28 @@ final class AddQuote extends AbstractCommand
             return;
         }
 
-        try {
-            DB::transaction(function () use ($text, $category_name) {
-                if ( ! $quote = $this->createNewQuote($text)) {
-                    throw new RuntimeException('Fallo al añadir quote.');
-                }
+        DB::transaction(function () use ($text, $category_name) {
+            if ( ! $quote = $this->createNewQuote($text)) {
+                throw new RuntimeException('Fallo al añadir quote.');
+            }
 
-                // Uncategorized quotes do not need to do anything else
-                if (empty($category_name)) {
-                    return;
-                }
+            // Uncategorized quotes do not need to do anything else
+            if (empty($category_name)) {
+                return;
+            }
 
-                if ( ! $category = $this->getOrCreateCategory($category_name)) {
-                    throw new RuntimeException(
-                        'Fallo al guardar categoría.'
-                    );
-                }
+            if ( ! $category = $this->getOrCreateCategory($category_name)) {
+                throw new RuntimeException(
+                    'Fallo al guardar categoría.'
+                );
+            }
 
-                if ( ! $quote->categories()->save($category)) {
-                    throw new RuntimeException(
-                        'Fallo al guardar relación de quote/categoría.'
-                    );
-                }
-            });
-        } catch (Throwable $e) {
-            $this->replyWithErrorMessage(
-                'Pos ahora peto y no me da la gana de hacerte caso, ' .
-                $this->getUpdate()->message->from->username . '.'
-            );
-
-            return;
-        }
+            if ( ! $quote->categories()->save($category)) {
+                throw new RuntimeException(
+                    'Fallo al guardar relación de quote/categoría.'
+                );
+            }
+        });
 
         $this->replyWithMessage([
             'text' => '✅ Quote agregado... ¡y lo llevo aquí colgado!',
