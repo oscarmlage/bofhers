@@ -1,11 +1,11 @@
 # Changelog
 
-## ?????
+## Unknown version
 
 ### Breaking changes
 
-- `b5bef60` **BREAKING CHANGE** Added the `TELEGRAM_WEBHOOK_ROUTE` key to the `.env.example` file. This value will define the route used for the webhook. Read the file for details. After changing it, it is recommended to regenerate the webhook (`php artisan telegram:webhook --setup --all`).  
-- `b5bef60` **BREAKING CHANGE** The `TELEGRAM_WEBHOOK_URL` key on the `.env` file should reflect the route used by the `TELEGRAM_WEBHOOK_ROUTE` env value.
+- `b5bef60` Added the `TELEGRAM_WEBHOOK_ROUTE` key to the `.env.example` file. This value will define the route used for the webhook. Read the example envfile file for details. After changing it, it is recommended to regenerate the webhook (`php artisan telegram:webhook --setup --all`).  
+- `b5bef60` The `TELEGRAM_WEBHOOK_URL` key on the `.env` file should reflect the route used by the `TELEGRAM_WEBHOOK_ROUTE` env value.
 - `b5bef60` Deleted the `BOFHERS_TELEGRAM_WEBHOOK_KEY` key. `TELEGRAM_WEBHOOK_ROUTE` is the substitute for webhook obfuscation.
 
 Update instructions:
@@ -17,9 +17,11 @@ Update instructions:
 
 ### New features
 
-- `d6f272e` Adapted all the `!commands` to Telegram's command API which uses `/` (fixes #32).
+- `d6f272e` Adapted all the `!commands` so that they use Telegram's command's API which uses `/` instead of `!` (fixes #32). Added deprecation notices to old `!commands`.
 - `b5bef60` Added the artisan command `telegram:registerBotCommands` to integrate the bot into Telegram's commands API (see #32).
 - `b5bef60` Modified the docker testing environment and documentation to auto register webhook and bot commands (see #32).
+- `92c4e4a` `/quote` now accepts an optional argument _category_ which allows the bot to only show a given category's quotes (`/quote mycategory`).
+- `92c4e4a` `/addquote` now allows to add a category to the new quote. The format `/addquote <text> %% <category>` should be used when trying to categorize a new quote. (fixes #10 via categorizing quotes with `random_insult`, also see #5 as you could categorize quotes with `congrats`). 
 
 ### Fixes and refactors 
 
