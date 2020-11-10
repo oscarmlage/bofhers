@@ -26,10 +26,7 @@ final class Quote extends AbstractCommand
      */
     protected $name = 'quote';
 
-    /**
-     * @var string
-     */
-    protected $pattern = '{category}';
+    protected $arguments_regexp = '/(?P<tag>.*)?/';
 
     /**
      * @var string
@@ -50,10 +47,10 @@ final class Quote extends AbstractCommand
         /**
          * Get and send the quote
          */
-        $arguments = $this->getArguments();
+        $arguments = $this->getBofhersArguments();
         $text      = QuoteModel::getAndMarkRandomQuoteText(
             $this->getChatId(),
-            $arguments['category'] ?? null);
+            $arguments['tag'][0] ?? null);
         $this->replyWithMessage(['text' => $text]);
     }
 }

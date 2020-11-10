@@ -14,11 +14,22 @@ use Telegram\Bot\Commands\Command;
  */
 abstract class AbstractCommand extends Command
 {
+
     /**
      * Hidden commands won't be shown on the /help command
+     *
      * @var bool
      */
     protected $hidden = false;
+
+    /**
+     * The regex that will be used by the getBofhersArguments() to parse
+     * variables from the command line when receiving a command.
+     *
+     * @var null|string
+     */
+    protected $arguments_regexp = null;
+
     /**
      * Returns the TelegramCanal object associated with the chat ID given
      * in the Telegram's update that triggered this command and is properly
@@ -80,10 +91,65 @@ abstract class AbstractCommand extends Command
 
     /**
      * Returns true if the command shouldn't be shown on the /help command
+     *
      * @return bool
      */
     protected function isHidden(): bool
     {
         return $this->hidden;
+    }
+
+    /**
+     * Given an arbitrary string -suppossed to be an error message- sends the
+     * given string to the channel that triggered the current command's
+     * execution.
+     *
+     * @param string $error The error string to send to the channel
+     */
+    protected function replyWithErrorMessage(string $error)
+    {
+        $this->replyWithMessage(['text' => "❌ ${error}"]);
+    }
+
+    /**
+     * The Telegram SDK for PHP that this project uses has a getArguments()
+     * implementation that, unfortunatly, lacks a few features to make it
+     * flexible.
+     *
+     * Because of that, this method exists. It parses the text line from the
+     * Update that triggered the commands and extracts the variables inside it
+     * according to the $arguments_regexp variable.
+     *
+     * The result will be a dictionary with the results of using the
+     * preg_match_all function with those parameters. It is recommended to use
+     * capture groups to make it easier to work.
+     *
+     * @return array Parsed arguments from the Update
+     * @see \preg_match_all()
+     * @see $this->arguments_regexp
+     */
+    protected function getBofhersArguments(): array
+    {
+        $message = trim($this->getUpdate()->message->text ?? '');
+        $matches = [];
+
+        // Remove the preceding command name from the text and save the raw args
+        $names   = implode(array_merge($this->aliases, [$this->name]), '|');
+        $pattern = '\/(?:' . $names . ')\s*(?P<raw_args>.*)?';
+
+        preg_match_all("/^${pattern}$/", $message, $matches);
+        $message = trim($matches["raw_args"][0]);
+
+        if (empty($message) || empty($this->arguments_regexp)) {
+            return [];
+        }
+
+        if ( ! $this->arguments_regexp) {
+            return ['text' => $message];
+        }
+
+        preg_match_all($this->arguments_regexp, $message, $matches);
+
+        return $matches;
     }
 }
