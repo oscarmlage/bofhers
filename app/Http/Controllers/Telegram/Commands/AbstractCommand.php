@@ -31,6 +31,14 @@ abstract class AbstractCommand extends Command
     protected $arguments_regexp = null;
 
     /**
+     * The text that will be shown whenever someone requests help for this
+     * one specific command. If it is null help won't be shown.
+     *
+     * @var string|null
+     */
+    public $long_help = null;
+
+    /**
      * Returns the TelegramCanal object associated with the chat ID given
      * in the Telegram's update that triggered this command and is properly
      * enabled in the application's database.

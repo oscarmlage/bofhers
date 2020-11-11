@@ -22,7 +22,19 @@ final class AddQuote extends AbstractCommand
 
     protected $name = 'addquote';
     protected $description = 'Añade una cita sin validar a la lista con una ' .
-                             'categoría opcional';
+                             'categoría opcional.';
+
+
+    public $long_help = <<<HELP
+    - `/addquote <texto>` - Añadir una cita. 
+    - `/addquote <texto> %% <categoria>` - Añadir una cita y asociarle una categoría.
+        
+    El comando añade una cita al montón para que pueda mostrarse al usar el comando `/quote`.
+        
+    La categoría es opcional y puede utilizarse posteriormente con `/quote <categoria>`.
+
+    Las citas añadidas han de ser validadas previo a ser mostradas.
+    HELP;
 
     /**
      * This is used to parse the arguments on the command, which are:
