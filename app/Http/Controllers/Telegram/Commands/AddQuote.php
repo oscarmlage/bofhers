@@ -56,7 +56,7 @@ final class AddQuote extends AbstractCommand
      *
      * @var string
      */
-    protected $arguments_regexp = '/(?P<text>.*?)(\s*%%\s*(?P<category>.*))?$/';
+    protected $arguments_regexp = '/(?P<text>.*?)(\s+%%\s+(?P<category>.*))?$/';
 
     /**
      * Validates an incoming quote returning a string describing the validation
