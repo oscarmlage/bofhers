@@ -3,6 +3,7 @@
 use App\Http\Controllers\Telegram\Commands\AddQuote;
 use App\Http\Controllers\Telegram\Commands\Anclado;
 use App\Http\Controllers\Telegram\Commands\Canal;
+use App\Http\Controllers\Telegram\Commands\Categorias;
 use App\Http\Controllers\Telegram\Commands\ChatId;
 use App\Http\Controllers\Telegram\Commands\Help;
 use App\Http\Controllers\Telegram\Commands\Quote;
@@ -53,6 +54,7 @@ return [
                 AddQuote::class,
                 Anclado::class,
                 Canal::class,
+                Categorias::class,
                 ChatId::class,
                 Help::class,
                 Quote::class,
