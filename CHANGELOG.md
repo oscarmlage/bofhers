@@ -29,6 +29,7 @@ Update instructions:
 - `b5bef60` Removed the `/random` route.
 - `b5bef60` Refactored a few instances of code so that the Telegram service is instantiated via dependency injection instead of using it manually (this is required so that it reads the full configuration on the `config/telegram.php` file).
 - `b5bef60` Tweaked a few values on the `config/telegram.php` file to enable commands and proper webhook registration.
+- `de10710` As of now, composer v2 is not playing nicely with backpack. Rolling back to v1.
 
 ## 0.0.2
 
