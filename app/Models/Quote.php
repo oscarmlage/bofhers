@@ -42,8 +42,8 @@ class Quote extends Model
     }
 
     /**
-     * Given an arbitrary chat_id and category_slug, searchs for a random quote
-     * that matchs the given criteria and has an active value of
+     * Given an arbitrary chat_id and category_name, searches for a random quote
+     * that matches the given criteria and has an active value of
      * QUOTE_STATUS_NOT_YET_SAID.
      *
      * In case there's not a quote with the criteria and that status, all of
@@ -56,7 +56,7 @@ class Quote extends Model
      *
      * @param string      $chat_id       The chat id to which the quote must
      *                                   belong to.
-     * @param string|null $category_slug The category slug to which the quote
+     * @param string|null $category_name The category name to which the quote
      *                                   must belong to. If null, it will be
      *                                   ignored.
      *
@@ -66,13 +66,12 @@ class Quote extends Model
      */
     public static function getAndMarkRandomQuoteText(
         string $chat_id,
-        string $category_slug = null
+        string $category_name = null
     ): string {
         $category = null;
 
-        if ( ! is_null($category_slug) ) {
-            if ( ! $category = Category::where('slug', $category_slug)
-                                       ->first()) {
+        if ( ! is_null($category_name)) {
+            if ( ! $category = Category::fromName('slug', $category_name)) {
                 return '404: category not found';
             }
         }
@@ -85,11 +84,11 @@ class Quote extends Model
          */
         $_quoteBuilder = function () use ($chat_id, $category) {
             if ( ! is_null($category)) {
-                $ids  = $category->quotes
-                        ->where('chat_id', $chat_id)
-                        ->map(function($item, $key) {
-                            return $item->id;
-                        });
+                $ids     = $category->quotes
+                    ->where('chat_id', $chat_id)
+                    ->map(function ($item, $key) {
+                        return $item->id;
+                    });
                 $builder = static::whereIn('id', $ids);
             } else {
                 $builder = static::where('chat_id', $chat_id);
@@ -127,8 +126,9 @@ class Quote extends Model
          * fact.
          */
         $_quoteBuilder()
-                ->where('active', static::QUOTE_STATUS_ALREADY_SAID)
-                ->update(['active' => static::QUOTE_STATUS_NOT_YET_SAID]);
+            ->where('active', static::QUOTE_STATUS_ALREADY_SAID)
+            ->update(['active' => static::QUOTE_STATUS_NOT_YET_SAID]);
+
         return 'Pasamos de fase, quotes reiniciados, nivel DOS';
     }
 
