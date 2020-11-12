@@ -32,7 +32,7 @@ final class Help extends AbstractCommand
     protected $name = 'help';
     protected $aliases = ['menutifu', 'rtfm'];
     protected $description = 'Muestra los comandos a los que responde el bot.';
-    protected $arguments_regexp = '/(?P<text>.*)/';
+    protected $arguments_regexp = '/(?P<text>.*)/s';
     public $long_help = 'Creo que necesitas un tipo de ayuda que no puedo darte 😥';
 
     /**

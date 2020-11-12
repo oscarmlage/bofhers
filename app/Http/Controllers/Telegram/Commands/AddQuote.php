@@ -45,18 +45,20 @@ final class AddQuote extends AbstractCommand
      * <category> is optional and might not exist.
      *
      * <text> and <category> must be separated by two consecutive "%%"
-     * characters with any blank space characters before and after.
+     * characters with 1 ore more blank space characters before and after.
      *
      * The following strings are valid:
      *
      * - this is a test message without a category
      * - this is a test message with a category named "test" %% test
-     * - this is the same as above, without whitespace%%test
+     * - this is a
+     *   multiline test message
+     *   with a category named 'multiline' %% multiline
      * - finally, the same again, but with random whitespace      %%   test
      *
      * @var string
      */
-    protected $arguments_regexp = '/(?P<text>.*?)(\s+%%\s+(?P<category>.*))?$/';
+    protected $arguments_regexp = '/(?P<text>.*?)(\s+%%\s+(?P<category>.*))?$/s';
 
     /**
      * Validates an incoming quote returning a string describing the validation

@@ -145,7 +145,7 @@ abstract class AbstractCommand extends Command
         $names   = implode(array_merge($this->aliases, [$this->name]), '|');
         $pattern = '\/(?:' . $names . ')\s*(?P<raw_args>.*)?';
 
-        preg_match_all("/^${pattern}$/", $message, $matches);
+        preg_match_all("/^${pattern}$/s", $message, $matches);
         $message = trim($matches["raw_args"][0]);
 
         if (empty($message) || empty($this->arguments_regexp)) {
