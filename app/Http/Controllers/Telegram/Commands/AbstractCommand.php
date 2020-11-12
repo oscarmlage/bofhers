@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers\Telegram\Commands;
 
+use App\Http\Controllers\Telegram\Commands\Exceptions\UnknownCommandException;
 use App\Models\TelegramCanal;
 use Telegram\Bot\Commands\Command;
 
@@ -147,7 +148,7 @@ abstract class AbstractCommand extends Command
 
         preg_match_all("/^${pattern}$/s", $message, $matches);
 
-        if ( isset($matches["raw_args"][0]) ) {
+        if ( ! isset($matches["raw_args"][0]) ) {
             throw new UnknownCommandException(
                 "Comando desconocido para: '${message}'."
             );
