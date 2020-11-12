@@ -57,7 +57,9 @@ class sendQuote extends Command
         }
 
         foreach($canales as $canal){
-            $quote = Quote::getAndMarkRandomQuoteText($canal->chat_id, $category ?? null);
+            $quote = Quote::getAndMarkRandomQuoteText(
+                $canal->chat_id, $category ?? null
+            );
 
             $data = [
                 'chat_id' => $canal->chat_id,
