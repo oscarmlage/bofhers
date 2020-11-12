@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Telegram\Commands;
 
 use App\Http\Controllers\Telegram\Commands\AbstractCommand as AbstractCommandAlias;
+use App\Http\Controllers\Telegram\Commands\Exceptions\UnknownCommandException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Actions;
@@ -154,7 +155,16 @@ final class Help extends AbstractCommand
             return;
         }
 
-        $arguments = $this->getBofhersArguments();
+        try {
+            $arguments = $this->getBofhersArguments();
+        } /**
+         * If this happens that means that the SDK has routed the unknown command
+         * to /help, so the underlying argument detection won't work. In this case
+         * we simply show the commands.
+         */
+        catch (UnknownCommandException $e) {
+            $arguments = [];
+        }
 
         if (empty($arguments['text'])) {
             $this->listCommands();

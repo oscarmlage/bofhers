@@ -146,6 +146,13 @@ abstract class AbstractCommand extends Command
         $pattern = '\/(?:' . $names . ')\s*(?P<raw_args>.*)?';
 
         preg_match_all("/^${pattern}$/s", $message, $matches);
+
+        if ( isset($matches["raw_args"][0]) ) {
+            throw new UnknownCommandException(
+                "Comando desconocido para: '${message}'."
+            );
+        }
+
         $message = trim($matches["raw_args"][0]);
 
         if (empty($message) || empty($this->arguments_regexp)) {
