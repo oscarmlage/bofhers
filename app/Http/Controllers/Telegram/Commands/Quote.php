@@ -25,7 +25,7 @@ final class Quote extends AbstractCommand
      * @var string
      */
     protected $name = 'quote';
-    protected $arguments_regexp = '/(?P<tag>.*)?/';
+    protected $arguments_regexp = '/(?P<category>.*)?/';
 
     /**
      * @var string
@@ -56,9 +56,21 @@ final class Quote extends AbstractCommand
          * Get and send the quote
          */
         $arguments = $this->getBofhersArguments();
-        $text      = QuoteModel::getAndMarkRandomQuoteText(
+        $category  = $arguments['category'][0] ?? null;
+
+        // We are explicitely trying to show an 'uncategorized' quote
+        if ( ! empty($category)) {
+            $pattern = '^' . Categorias::UNCATEGORIZED_NAME . '$';
+
+            if (preg_match("/${pattern}/i", $category) === 1) {
+                $category = null;
+            }
+        }
+
+        $text = QuoteModel::getAndMarkRandomQuoteText(
             $this->getChatId(),
-            $arguments['tag'][0] ?? null);
+            $category
+        );
         $this->replyWithMessage(['text' => $text]);
     }
 }

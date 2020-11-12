@@ -16,6 +16,11 @@ use function count;
 final class Categorias extends AbstractCommand
 {
 
+    /**
+     * Name used to group uncategorized tags under
+     */
+    public const UNCATEGORIZED_NAME = 'sin categoría';
+
     protected $name = 'categorias';
     protected $description = 'Muestra las categorías con citas validadas.';
 
@@ -27,7 +32,7 @@ final class Categorias extends AbstractCommand
         }
 
         $sql = <<<SQL
-            SELECT ifnull(name, 'sin categoria') as name, count(*) as quotes
+            SELECT ifnull(name, ?) as name, count(*) as quotes
             FROM categories
             RIGHT OUTER JOIN quotes_categories qc on qc.category_id = categories.id
             RIGHT OUTER JOIN quotes q on qc.quote_id = q.id
@@ -37,7 +42,12 @@ final class Categorias extends AbstractCommand
             ORDER BY count(*) DESC
         SQL;
 
-        $categories = DB::select($sql, [Quote::QUOTE_STATUS_NOT_VALIDATED]);
+        $categories = DB::select(
+            $sql, [
+                self::UNCATEGORIZED_NAME,
+                Quote::QUOTE_STATUS_NOT_VALIDATED,
+            ]
+        );
 
         if ( ! count($categories)) {
             $this->replyWithErrorMessage(

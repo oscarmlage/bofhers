@@ -107,6 +107,13 @@ final class AddQuote extends AbstractCommand
             return 'Esa categoría no me entra aunque hagas fuerza.';
         }
 
+        $pattern = '^' . Categorias::UNCATEGORIZED_NAME . '$';
+
+        if (preg_match("/${pattern}/i", $category) === 1) {
+            return '¡Bravoooo!, ¡muy bien!, ¡qué ingenio!, ' .
+                   'aplauso para tamaña genialidad 👏🏾👏🏾👏🏾 /s';
+        }
+
         return null;
     }
 
@@ -199,7 +206,7 @@ final class AddQuote extends AbstractCommand
 
         $arguments     = $this->getBofhersArguments();
         $text          = $arguments['text'][0] ?? null;
-        $category_name = $arguments['category'][0] ?? null;
+        $category_name = strtolower($arguments['category'][0]) ?? null;
 
         // Simple and trivial validation
         if ($error = $this->getValidationError($text, $category_name)) {
