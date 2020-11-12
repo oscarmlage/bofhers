@@ -59,7 +59,9 @@ class TelegramController extends Controller
             $tel->save();
 
             try {
-                $this->telegram->commandsHandler(true);
+                if ( substr($this->text ?? '', 0, 1) === '/') {
+                    $this->telegram->commandsHandler(true);
+                }
             } catch (Throwable $e) {
                 Log::error(
                     $e->getMessage() . PHP_EOL . $e->getTraceAsString()
