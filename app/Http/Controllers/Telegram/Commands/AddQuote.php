@@ -98,7 +98,7 @@ final class AddQuote extends AbstractCommand
                    'son una de las que no.';
         }
 
-        if (1 !== preg_match('/^[a-z0-9 ]+$/', $category)) {
+        if (1 !== preg_match('/^[\pL0-9]+$/ui', $category)) {
             return 'No voy a guardar categorías llenas de basura: solo ' .
                    'carácteres alfanuméricos y espacios.';
         }
