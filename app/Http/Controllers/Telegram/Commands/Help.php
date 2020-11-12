@@ -62,6 +62,9 @@ final class Help extends AbstractCommand
                 $command->getDescription());
         }
 
+        $response .= PHP_EOL . 'Algunos comandos disponen de ayuda extendida ' .
+                     'con `/help <comando>`.';
+
         $this->replyWithMessage([
             'parse_mode' => 'markdown',
             'text'       => $response,
