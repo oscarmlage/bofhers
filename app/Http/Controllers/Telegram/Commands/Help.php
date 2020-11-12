@@ -166,9 +166,6 @@ final class Help extends AbstractCommand
          * we simply show the commands.
          */
         catch (UnknownCommandException $e) {
-            $text = substr($this->getUpdate()->message->text ?? '/', 1);
-            $this->showCommandHelp($text);
-
             return;
         }
 
