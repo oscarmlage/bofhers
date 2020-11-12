@@ -51,7 +51,7 @@ class Quote extends Model
      * to QUOTE_STATUS_NOT_YET_SAID and an informative string message will be
      * returned as the quote.
      *
-     * If there are errors (no quotes found or no such category slug) an
+     * If there are errors (no quotes found or no such category name) an
      * informative error will be returned as a quote.
      *
      * @param string      $chat_id       The chat id to which the quote must
@@ -71,7 +71,7 @@ class Quote extends Model
         $category = null;
 
         if ( ! is_null($category_name)) {
-            if ( ! $category = Category::fromName('slug', $category_name)) {
+            if ( ! $category = Category::fromName($category_name)) {
                 return '404: category not found';
             }
         }
