@@ -22,6 +22,7 @@ Update instructions:
 - `b5bef60` Modified the docker testing environment and documentation to auto register webhook and bot commands (see #32).
 - `92c4e4a` `/quote` now accepts an optional argument _category_ which allows the bot to only show a given category's quotes (`/quote mycategory`).
 - `92c4e4a` `/addquote` now allows to add a category to the new quote. The format `/addquote <text> %% <category>` should be used when trying to categorize a new quote. (fixes #10 via categorizing quotes with `random_insult`, also see #5 as you could categorize quotes with `congrats`). 
+- `a742350` New command `/categorias`. As of now it only works for categories of quotes.
 
 ### Fixes and refactors 
 
