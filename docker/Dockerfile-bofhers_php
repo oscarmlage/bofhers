@@ -15,7 +15,7 @@ RUN mv "${PHP_INI_DIR}/php.ini-development" "${PHP_INI_DIR}/php.ini"
 RUN echo "memory_limit=-1" > "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
 
 # Composer executable and misc. utilities
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:1 /usr/bin/composer /usr/bin/composer
 COPY ./scripts/bofhers_php/bofhers_php_entrypoint.sh /usr/local/bin
 
 # PHP user permissions
