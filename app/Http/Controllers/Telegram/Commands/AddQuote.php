@@ -206,7 +206,7 @@ final class AddQuote extends AbstractCommand
 
         $arguments     = $this->getBofhersArguments();
         $text          = $arguments['text'][0] ?? null;
-        $category_name = strtolower($arguments['category'][0]) ?? null;
+        $category_name = strtolower($arguments['category'][0] ?? null);
 
         // Simple and trivial validation
         if ($error = $this->getValidationError($text, $category_name)) {
