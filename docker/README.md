@@ -30,7 +30,7 @@ Start by cloning the repository and navigating into the `./docker` directory.
 
 In there you'll find the `./docker/.env.example` file which contains every aspect of the application that can be configured. Copy the file to `./docker/.env` and edit it to suit your needs. The file itself is documented and straightforward. **DO NOT** mistake this _envfile_ with the application's own _envfile_; `./env` and `./docker/.env` are different files used for different things.
 
-The defaults on the file are sane so most likely you won't need to change anything but the Telegram credentials and URLs.
+The defaults on the file are sane so most likely you won't need to change anything but the Telegram credentials, URLs and the PHP user ID (which might require you to create an user on your system with docker permissions).
 
 Speaking of Telegram, if you need help to configure its integration read the section "_Setting up Telegram_" below. Do this **before** starting the application.
  
