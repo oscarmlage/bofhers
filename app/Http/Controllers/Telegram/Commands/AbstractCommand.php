@@ -24,7 +24,7 @@ abstract class AbstractCommand extends Command
     protected $hidden = false;
 
     /**
-     * The regex that will be used by the getBofhersArguments() to parse
+     * The regex that will be used by the parseBofhersArguments() to parse
      * variables from the command line when receiving a command.
      *
      * @var null|string
@@ -139,44 +139,23 @@ abstract class AbstractCommand extends Command
      */
     protected function replyWithErrorMessage(string $error)
     {
-        $this->answerWithMessage(['text' => "❌ ${error}"]);
+        $this->answerWithMessage("❌ ${error}");
     }
 
     /**
-     * The Telegram SDK for PHP that this project uses has a getArguments()
-     * implementation that, unfortunatly, lacks a few features to make it
-     * flexible.
+     * Parses the arguments of the command (that is: the text that is not
+     * the command name) with the pattern given by $this->arguments_regexp
+     * and returns any matches.
      *
-     * Because of that, this method exists. It parses the text line from the
-     * Update that triggered the commands and extracts the variables inside it
-     * according to the $arguments_regexp variable.
+     * @param string $args
      *
-     * The result will be a dictionary with the results of using the
-     * preg_match_all function with those parameters. It is recommended to use
-     * capture groups to make it easier to work.
-     *
-     * @return array Parsed arguments from the Update
-     * @see \preg_match_all()
-     * @see $this->arguments_regexp
+     * @return array Parsed array from the text argument
+     * @see       $this->arguments_regexp
+     * @see       \preg_match_all()
      */
-    protected function getBofhersArguments(): array
+    protected function parseBofhersArguments(string $args): array
     {
-        $message = trim($this->getUpdate()->message->text ?? '');
-        $matches = [];
-
-        // Remove the preceding command name from the text and save the raw args
-        $names   = implode(array_merge($this->aliases, [$this->name]), '|');
-        $pattern = '\/(?:' . $names . ')\s*(?P<raw_args>.*)?';
-
-        preg_match_all("/^${pattern}$/s", $message, $matches);
-
-        if ( ! isset($matches["raw_args"][0])) {
-            throw new UnknownCommandException(
-                "Comando desconocido para: '${message}'."
-            );
-        }
-
-        $message = trim($matches["raw_args"][0]);
+        $message = trim($args);
 
         if (empty($message) || empty($this->arguments_regexp)) {
             return [];
@@ -195,10 +174,45 @@ abstract class AbstractCommand extends Command
      * Implement this to handle an incoming command.
      *
      * @param array|null $bofhersArguments The bofhersArguments array
-     * @see AbstractCommand::getBofhersArguments()
+     *
      * @return mixed
+     * @see AbstractCommand::parseBofhersArguments()
      */
     abstract public function handlerBofhers(array $bofhersArguments = null);
+
+    /**
+     * Parses the raw text line in the update that triggered the command call
+     * and returns an array with the following contents:
+     *
+     * [
+     *  'cmd'    => (?string):  name of the command or null if it does not match
+     *                          our name or one of our aliases
+     *  'botname => (?string):  bot name that the command is explicitely using
+     *                          (/command@BotName) or null if the command is not
+     *                          actively invoking a bot (/command)
+     *  'args'   => (?string):  text with any extra arguments passed to /command
+     *                          or null if there's none.
+     * ]
+     *
+     * @return array|null[]
+     */
+    protected function parseBofhersCommand(): array
+    {
+        $message = trim($this->getUpdate()->message->text ?? '');
+        $matches = [];
+
+        // Remove the preceding command name from the text and save the raw args
+        $names   = implode(array_merge($this->aliases, [$this->name]), '|');
+        $pattern = "\/(?P<cmd>${names})(?P<botname>@.*bot)?\s*(?P<args>.*)?";
+
+        preg_match_all("/^${pattern}$/is", $message, $matches);
+
+        return [
+            'cmd'     => $matches['cmd'][0] ?? null,
+            'botname' => $matches['botname'][0] ?? null,
+            'args'    => $matches['args'][0] ?? null,
+        ];
+    }
 
     /**
      * This method is used by the Telegram's library to invoke commands.
@@ -221,6 +235,21 @@ abstract class AbstractCommand extends Command
             return;
         }
 
-        $this->handlerBofhers($this->getBofhersArguments());
+        $command_parts = $this->parseBofhersCommand();
+
+        // Command invoked does not match neither our name nor one of our aliases
+        if (is_null($command_parts['cmd'])) {
+            return;
+        }
+
+        // We are explicitely calling a botname that is not us.
+        if ( ! empty($command_parts['botname'])) {
+            $my_botname = "@" . $this->telegram->getMe()->username;
+
+            if ($my_botname !== $command_parts['botname']) {
+                return;
+            }
+        }
+        $this->handlerBofhers($this->parseBofhersArguments($command_parts['args']));
     }
 }

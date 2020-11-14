@@ -151,17 +151,6 @@ final class Help extends AbstractCommand
             return;
         }
 
-        try {
-            $arguments = $this->getBofhersArguments();
-        } /**
-         * If this happens that means that the SDK has routed the unknown command
-         * to /help, so the underlying argument detection won't work. In this case
-         * we simply show the commands.
-         */
-        catch (UnknownCommandException $e) {
-            return;
-        }
-
         if (empty($arguments['text'])) {
             $this->listCommands();
         } else {

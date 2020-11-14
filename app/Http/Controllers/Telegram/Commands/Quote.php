@@ -55,7 +55,6 @@ final class Quote extends AbstractCommand
         /**
          * Get and send the quote
          */
-        $arguments = $this->getBofhersArguments();
         $category  = $arguments['category'][0] ?? null;
 
         // We are explicitely trying to show an 'uncategorized' quote
