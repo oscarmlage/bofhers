@@ -145,7 +145,7 @@ final class Help extends AbstractCommand
         $this->answerWithMessage($cmd->long_help, ['parse_mode' => 'markdown']);
     }
 
-    public function handle()
+    public function handlerBofhers(array $arguments = null)
     {
         if ( ! $this->isValidChannel()) {
             return;

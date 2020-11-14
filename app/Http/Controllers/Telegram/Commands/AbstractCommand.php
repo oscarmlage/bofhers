@@ -190,4 +190,37 @@ abstract class AbstractCommand extends Command
 
         return $matches;
     }
+
+    /**
+     * Implement this to handle an incoming command.
+     *
+     * @param array|null $bofhersArguments The bofhersArguments array
+     * @see AbstractCommand::getBofhersArguments()
+     * @return mixed
+     */
+    abstract public function handlerBofhers(array $bofhersArguments = null);
+
+    /**
+     * This method is used by the Telegram's library to invoke commands.
+     *
+     * As there are certain things that we do not wish to enforce on Bofher's
+     * commands that the library forces us to do (for example: a single update
+     * with several commands triggers all of them) we tweak it to suit our
+     * own preferences.
+     */
+    public function handle()
+    {
+        /**
+         * If the offset is not 0, it means that we are dealing with a command
+         * in the middle of the text, which we do not wish to answer to.
+         *
+         * For example, the text: "hello this is a /command" would trigger an
+         * command with an offset of 16.
+         */
+        if ($this->entity['offset'] !== 0) {
+            return;
+        }
+
+        $this->handlerBofhers($this->getBofhersArguments());
+    }
 }

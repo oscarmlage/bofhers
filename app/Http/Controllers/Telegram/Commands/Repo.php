@@ -14,7 +14,7 @@ final class Repo extends AbstractCommand
     protected $name = 'repo';
     protected $description = 'Muestra el link del repositorio del bot.';
 
-    public function handle()
+    public function handlerBofhers(array $arguments = null)
     {
         if ( ! $this->isValidChannel()) {
             return;

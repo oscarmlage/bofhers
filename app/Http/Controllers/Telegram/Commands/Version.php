@@ -15,7 +15,7 @@ final class Version extends AbstractCommand
     protected $name = 'version';
     protected $description = 'Muestra la versión del bot y herramienta.';
 
-    public function handle()
+    public function handlerBofhers(array $arguments = null)
     {
         if ( ! $this->isValidChannel()) {
             return;

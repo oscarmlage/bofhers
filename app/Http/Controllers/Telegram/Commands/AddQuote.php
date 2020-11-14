@@ -198,13 +198,12 @@ final class AddQuote extends AbstractCommand
         return $category->save() ? $category : null;
     }
 
-    public function handle()
+    public function handlerBofhers(array $arguments = null)
     {
         if ( ! $this->isValidChannel()) {
             return;
         }
 
-        $arguments     = $this->getBofhersArguments();
         $text          = $arguments['text'][0] ?? null;
         $category_name = strtolower($arguments['category'][0] ?? null);
 

@@ -16,7 +16,7 @@ final class Stats extends AbstractCommand
     protected $name = 'stats';
     protected $description = 'Muestra estadísticas de las citas del canal.';
 
-    public function handle()
+    public function handlerBofhers(array $arguments = null)
     {
         if ( ! $this->isValidChannel()) {
             return;

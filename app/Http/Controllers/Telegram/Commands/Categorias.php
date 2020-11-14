@@ -25,7 +25,7 @@ final class Categorias extends AbstractCommand
     protected $description = 'Muestra las categorías con citas validadas.';
 
 
-    public function handle()
+    public function handlerBofhers(array $arguments = null)
     {
         if ( ! $this->isValidChannel()) {
             return;

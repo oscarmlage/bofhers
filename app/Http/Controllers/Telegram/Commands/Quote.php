@@ -46,7 +46,7 @@ final class Quote extends AbstractCommand
         $this->model = $model;
     }
 
-    public function handle()
+    public function handlerBofhers(array $arguments = null)
     {
         if ( ! $this->isValidChannel()) {
             return;

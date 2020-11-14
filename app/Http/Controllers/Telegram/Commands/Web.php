@@ -14,7 +14,7 @@ final class Web extends AbstractCommand
     protected $name = 'web';
     protected $description = 'Muestra la web asociada al canal.';
 
-    public function handle()
+    public function handlerBofhers(array $arguments = null)
     {
         if ( ! $this->isValidChannel()) {
             return;
