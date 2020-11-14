@@ -42,11 +42,6 @@ final class Help extends AbstractCommand
      */
     protected function listCommands()
     {
-        $this->answerWithMessage(
-            'A vé. Este es el listado de cosicas que hago:'
-        );
-        $this->replyWithChatAction(['action' => Actions::TYPING]);
-
         $commands = $this->getTelegram()->getCommands();
         $response = '';
 
@@ -62,6 +57,7 @@ final class Help extends AbstractCommand
                 $command->getDescription());
         }
 
+        $response = 'Este es el listado de cosicas que hago:';
         $response .= PHP_EOL . 'Algunos comandos disponen de ayuda extendida ' .
                      'con `/help <comando>`.';
 
