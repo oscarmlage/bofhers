@@ -43,7 +43,7 @@ final class Help extends AbstractCommand
     protected function listCommands()
     {
         $commands = $this->getTelegram()->getCommands();
-        $response = '';
+        $response = 'Este es el listado de cosicas que hago:';
 
         /**
          * @var $command AbstractCommand
@@ -57,7 +57,6 @@ final class Help extends AbstractCommand
                 $command->getDescription());
         }
 
-        $response = 'Este es el listado de cosicas que hago:';
         $response .= PHP_EOL . 'Algunos comandos disponen de ayuda extendida ' .
                      'con `/help <comando>`.';
 
