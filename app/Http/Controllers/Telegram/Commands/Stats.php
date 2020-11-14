@@ -44,12 +44,10 @@ final class Stats extends AbstractCommand
                                   Quote::QUOTE_STATUS_NOT_VALIDATED)
                               ->get());
 
-        $this->replyWithMessage([
-            'parse_mode' => 'html',
-            'text'       => '🔷️ All Quotes: <b>' . $all .
-                            '</b> 🤪️ Said Quotes: <b>' . $said .
-                            '</b> 🤫️ Not said quotes: <b>' . $not_said .
-                            '</b> 🔴️ Not validated yet: <b>' . $pending . '</b>',
-        ]);
+        $text = '🔷️ All Quotes: <b>' . $all .
+                '</b> 🤪️ Said Quotes: <b>' . $said .
+                '</b> 🤫️ Not said quotes: <b>' . $not_said .
+                '</b> 🔴️ Not validated yet: <b>' . $pending . '</b>';
+        $this->answerWithMessage($text, ['parse_mode' => 'html']);
     }
 }

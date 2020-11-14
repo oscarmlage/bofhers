@@ -238,8 +238,8 @@ final class AddQuote extends AbstractCommand
             }
         });
 
-        $this->replyWithMessage([
-            'text' => '✅ Quote agregado... ¡y lo llevo aquí colgado!',
-        ]);
+        $this->answerWithMessage(
+            '✅ Quote agregado... ¡y lo llevo aquí colgado!'
+        );
     }
 }

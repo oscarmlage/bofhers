@@ -42,9 +42,9 @@ final class Help extends AbstractCommand
      */
     protected function listCommands()
     {
-        $this->replyWithMessage([
-            'text' => 'A vé. Este es el listado de cosicas que hago:',
-        ]);
+        $this->answerWithMessage(
+            'A vé. Este es el listado de cosicas que hago:'
+        );
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $commands = $this->getTelegram()->getCommands();
@@ -65,10 +65,7 @@ final class Help extends AbstractCommand
         $response .= PHP_EOL . 'Algunos comandos disponen de ayuda extendida ' .
                      'con `/help <comando>`.';
 
-        $this->replyWithMessage([
-            'parse_mode' => 'markdown',
-            'text'       => $response,
-        ]);
+        $this->answerWithMessage($response, ['parse_mode' => 'markdown']);
     }
 
     /**
@@ -103,7 +100,6 @@ final class Help extends AbstractCommand
         }
 
         $cmd = __NAMESPACE__ . '\\' . $cmd;
-        Log::debug("namespace: ${cmd}");
 
         return class_exists($cmd) ? $cmd : null;
     }
@@ -146,10 +142,7 @@ final class Help extends AbstractCommand
             return;
         }
 
-        $this->replyWithMessage([
-            'parse_mode' => 'markdown',
-            'text'       => $cmd->long_help,
-        ]);
+        $this->answerWithMessage($cmd->long_help, ['parse_mode' => 'markdown']);
     }
 
     public function handle()

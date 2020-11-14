@@ -33,10 +33,10 @@ final class Canal extends AbstractCommand
         }
 
         $canal = $this->getChannel();
-        $this->replyWithMessage([
-            'text' => $canal->description ??
-                      'Léete el puto menú del canal que no estoy para ' .
-                      'atender tus tonterías.',
-        ]);
+        $this->answerWithMessage(
+            $canal->description ??
+            'Léete el puto menú del canal que no estoy para ' .
+            'atender tus tonterías.'
+        );
     }
 }

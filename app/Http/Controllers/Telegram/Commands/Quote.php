@@ -71,6 +71,6 @@ final class Quote extends AbstractCommand
             $this->getChatId(),
             $category
         );
-        $this->replyWithMessage(['text' => $text]);
+        $this->answerWithMessage($text);
     }
 }

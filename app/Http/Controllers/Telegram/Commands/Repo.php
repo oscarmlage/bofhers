@@ -20,6 +20,6 @@ final class Repo extends AbstractCommand
             return;
         }
 
-        $this->replyWithMessage(['text' => 'https://github.com/oscarmlage/bofhers']);
+        $this->answerWithMessage('https://github.com/oscarmlage/bofhers');
     }
 }

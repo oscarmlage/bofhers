@@ -24,8 +24,8 @@ final class Web extends AbstractCommand
             return;
         }
 
-        $this->replyWithMessage(([
-            'text' => $canal->web ?? 'No hay web asociada, HOSTIA YA.',
-        ]));
+        $this->answerWithMessage(
+            $canal->web ?? 'No hay web asociada, HOSTIA YA.'
+        );
     }
 }

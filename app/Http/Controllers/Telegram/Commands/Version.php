@@ -26,16 +26,16 @@ final class Version extends AbstractCommand
         );
 
         if ($version === false) {
-            $this->replyWithMessage(([
-                'text' => 'No tengo ni idea. O mejor dicho: algo ha petao. ' .
-                          'Mete un par de "dds()" para depurar el código o ' .
-                          'abre puertos en el router para meter XDebug y ver ' .
-                          'qué pasa.',
-            ]));
+            $this->replyWithErrorMessage(
+                'No tengo ni idea. O mejor dicho: algo ha petao. ' .
+                'Mete un par de "dds()" para depurar el código o ' .
+                'abre puertos en el router para meter XDebug y ver ' .
+                'qué pasa.',
+            );
 
             return;
         }
 
-        $this->replyWithMessage(['text' => "Versión ${version}"]);
+        $this->answerWithMessage("Versión ${version}");
     }
 }

@@ -109,6 +109,28 @@ abstract class AbstractCommand extends Command
     }
 
     /**
+     * Sends a reply to the message that triggered this command with a given
+     * text and an optional set of parameters.
+     *
+     * @param string $message The text message to be sent.
+     * @param array  $config  Optional parameters to the sendMessage API call
+     *                        that will be used.
+     *
+     * @link https://core.telegram.org/bots/api#sendmessage
+     */
+    protected function answerWithMessage(
+        string $message,
+        array $config = []
+    ) {
+        $data = [
+            'text'                => $message,
+            'reply_to_message_id' => $this->update->getMessage()->messageId,
+        ];
+        $data = array_merge($data, $config);
+        $this->replyWithMessage($data);
+    }
+
+    /**
      * Given an arbitrary string -suppossed to be an error message- sends the
      * given string to the channel that triggered the current command's
      * execution.
@@ -117,7 +139,7 @@ abstract class AbstractCommand extends Command
      */
     protected function replyWithErrorMessage(string $error)
     {
-        $this->replyWithMessage(['text' => "❌ ${error}"]);
+        $this->answerWithMessage(['text' => "❌ ${error}"]);
     }
 
     /**
@@ -148,7 +170,7 @@ abstract class AbstractCommand extends Command
 
         preg_match_all("/^${pattern}$/s", $message, $matches);
 
-        if ( ! isset($matches["raw_args"][0]) ) {
+        if ( ! isset($matches["raw_args"][0])) {
             throw new UnknownCommandException(
                 "Comando desconocido para: '${message}'."
             );

@@ -3,8 +3,6 @@
 
 namespace App\Http\Controllers\Telegram\Commands;
 
-use Illuminate\Support\Facades\Log;
-
 /**
  * Comnmand that displays the chat ID for this command
  *
@@ -24,12 +22,8 @@ final class ChatId extends AbstractCommand
      */
     public function handle()
     {
-        //$text = \json_encode($this->getUpdate(), JSON_PRETTY_PRINT);
         $text = $this->getChatId() . '';
 
-        $this->replyWithMessage(([
-            'parse_mode' => 'html',
-            'text'       => $text,
-        ]));
+        $this->answerWithMessage($text, (['parse_mode' => 'html']));
     }
 }

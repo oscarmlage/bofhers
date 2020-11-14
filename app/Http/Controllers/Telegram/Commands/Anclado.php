@@ -21,6 +21,6 @@ final class Anclado extends AbstractCommand
             return;
         }
 
-        $this->replyWithMessage(['text' => '¡El que tengo aquí colgado! 🍆']);
+        $this->answerWithMessage('¡El que tengo aquí colgado! 🍆');
     }
 }

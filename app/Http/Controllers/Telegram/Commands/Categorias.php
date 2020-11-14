@@ -65,6 +65,6 @@ final class Categorias extends AbstractCommand
         );
 
         $categories = implode($categories, ', ');
-        $this->replyWithMessage(['text' => $categories]);
+        $this->answerWithMessage($categories);
     }
 }
