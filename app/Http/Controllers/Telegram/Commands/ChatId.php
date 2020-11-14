@@ -20,7 +20,7 @@ final class ChatId extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function handle(array $arguments = null)
+    public function handlerBofhers(array $arguments = null)
     {
         $text = $this->getChatId() . '';
 
