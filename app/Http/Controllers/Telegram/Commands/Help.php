@@ -43,7 +43,7 @@ final class Help extends AbstractCommand
     protected function listCommands()
     {
         $commands = $this->getTelegram()->getCommands();
-        $response = 'Este es el listado de cosicas que hago:';
+        $response = 'Este es el listado de cosicas que hago:' . PHP_EOL;
 
         /**
          * @var $command AbstractCommand
