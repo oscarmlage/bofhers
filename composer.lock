@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0bc52d374a80cd0aaf7bd39d308a1acc",
+    "content-hash": "2f7a347556e1045d2bf1f03a110403f9",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -112,7 +112,6 @@
                 "backpack",
                 "base"
             ],
-            "abandoned": "backpack/crud",
             "time": "2019-09-17T09:02:22+00:00"
         },
         {
@@ -4947,7 +4946,6 @@
                 "faker",
                 "fixtures"
             ],
-            "abandoned": true,
             "time": "2019-12-12T13:22:17+00:00"
         },
         {
@@ -5792,7 +5790,6 @@
             "keywords": [
                 "tokenizer"
             ],
-            "abandoned": true,
             "time": "2019-09-17T06:23:10+00:00"
         },
         {
@@ -6545,6 +6542,5 @@
     "platform": {
         "php": "^7.1.3"
     },
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }
