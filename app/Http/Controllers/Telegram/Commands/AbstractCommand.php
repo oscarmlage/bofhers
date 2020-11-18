@@ -155,7 +155,7 @@ abstract class AbstractCommand extends Command
      */
     protected function parseBofhersArguments(string $args): array
     {
-        $message = trim($args);
+        $message = (string) trim($args);
 
         if (empty($message) || empty($this->arguments_regexp)) {
             return [];
