@@ -203,7 +203,7 @@ abstract class AbstractCommand extends Command
 
         // Remove the preceding command name from the text and save the raw args
         $names   = implode(array_merge($this->aliases, [$this->name]), '|');
-        $pattern = "\/(?P<cmd>${names})(?P<botname>@.*bot)?\s*(?P<args>.*)?";
+        $pattern = "\/(?P<cmd>${names})(?P<botname>@.*?bot)?\s*(?P<args>.*)?";
 
         preg_match_all("/^${pattern}$/is", $message, $matches);
 
