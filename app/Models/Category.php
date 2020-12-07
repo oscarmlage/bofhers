@@ -35,6 +35,18 @@ class Category extends Model
         ];
     }
 
+    /**
+     * Tries to find a category by its name and returns the model object, or
+     * null if there's no such category.
+     *
+     * @param string $category_name the category name
+     *
+     * @return Category|null
+     */
+    public static function fromName(string $category_name): ?Category
+    {
+        return static::where('name', '=', $category_name)->first();
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

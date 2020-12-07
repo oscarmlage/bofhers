@@ -44,6 +44,12 @@ else
   _msg "Backpack already installed, skipping."
 fi
 
+_msg "Setting up webhook..."
+php artisan telegram:webhook --setup --all
+
+_msg "Registering bot commands..."
+php artisan telegram:registerBotcommands
+
 # Run php-fpm
 _msg "Starting php-fpm..."
 php-fpm

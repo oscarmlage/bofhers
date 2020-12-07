@@ -30,7 +30,7 @@ Start by cloning the repository and navigating into the `./docker` directory.
 
 In there you'll find the `./docker/.env.example` file which contains every aspect of the application that can be configured. Copy the file to `./docker/.env` and edit it to suit your needs. The file itself is documented and straightforward. **DO NOT** mistake this _envfile_ with the application's own _envfile_; `./env` and `./docker/.env` are different files used for different things.
 
-The defaults on the file are sane so most likely you won't need to change anything but the Telegram credentials and URLs.
+The defaults on the file are sane so most likely you won't need to change anything but the Telegram credentials, URLs and the PHP user ID (which might require you to create an user on your system with docker permissions).
 
 Speaking of Telegram, if you need help to configure its integration read the section "_Setting up Telegram_" below. Do this **before** starting the application.
  
@@ -81,8 +81,6 @@ Please note that the first time that you start the application the `bofhers_php`
 Once all the containers are done starting, you should be able to access the application's admin panel by logging into `http://localhost/admin` or `${BOFHERS_TELEGRAM_WEBHOOK_URL}/admin`. In there you'll need to create an admin account so that you can log in to the backend.
  
 When you log in you'll need to set up your Telegram's Group in the admin interface. Click on "_Telegram, canales_" on the left menu and then "_Add telegram_canal_". In the form that will show up you'll need to add your Group's data, **make sure to mark it as Active**.
-
-After this, check your `docker/.env` file and concatenate the values of the `BOFHERS_TELEGRAM_WEBHOOK_URL` and the `BOFHERS_TELEGRAM_WEBHOOK_KEY` entry. This should result in an URL such as `https://subdomain.example.com/zZSTlKMRsoGwX37pp2NjCZnuLEbyDlTh1`. Append to it the suffix `/set-hook` and visit the URL in your browser. If all went well a single "ok" should be rendered in your screen and your bot is now ready to reply commands.
 
 # How do I rebuild the dev environment?
 
