@@ -55,7 +55,7 @@ class say extends Command
             $group = TelegramCanal::where('name', "#".$canal)->where('active', 1)->first();
         }
 
-        // Send the thing only if text exists and is not empty
+        // Send the thing only if text and group exists and are not empty
         if($text && $group) {
             $data = [
                 'chat_id' => $group->chat_id,
