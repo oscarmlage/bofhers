@@ -55,8 +55,8 @@ class TelegramController extends Controller
                 'text'             => $this->text,
                 'request'          => $request
             ];
-            $tel  = new Tel($data);
-            $tel->save();
+            /* $tel  = new Tel($data); */
+            /* $tel->save(); */
 
             try {
                 if ( substr($this->text ?? '', 0, 1) === '/') {
