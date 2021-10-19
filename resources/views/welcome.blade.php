@@ -63,13 +63,18 @@
             }
 
             ul#channels {
-                padding: 0;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
             }
             ul#channels li {
-                position: relative;
+                /* position: relative;
                 list-style-type: none;
                 padding-left: 2.5rem;
                 margin-bottom: 0.5rem;
+                text-align: left; */
+                flex: 1 1 25%;
+                list-style: none;
                 text-align: left;
             }
             ul#channels li a {
@@ -79,9 +84,9 @@
             ul#channels li:before {
                 content: '';
                 display: block;
-                position: absolute;
-                left: 0;
-                top: -2px;
+                position: relative;
+                left: -10%;
+                top: 11px;
                 width: 5px;
                 height: 11px;
                 border-width: 0 2px 2px 0;
@@ -145,6 +150,7 @@
                     <li><a href="https://t.me/joinchat/TOXRWaXwC-7Y8-HP">#BOFHers Mascotas</a></li>
                     <li><a href="https://t.me/bofhers_news">#BOFHers News</a></li>
                     <li><a href="https://t.me/bofhers_recetas">#BOFHers Recetas</a></li>
+                    <li><a href="https://t.me/joinchat/B3olGlsZnkdhMDc0">#BOFHers Streaming</a></li>
                 </ul>
             </div>
         </div>
