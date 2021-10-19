@@ -11,6 +11,7 @@ use App\Http\Controllers\Telegram\Commands\Repo;
 use App\Http\Controllers\Telegram\Commands\Stats;
 use App\Http\Controllers\Telegram\Commands\Version;
 use App\Http\Controllers\Telegram\Commands\Web;
+use App\Http\Controllers\Telegram\Commands\Invite;
 
 return [
     /*
@@ -62,6 +63,7 @@ return [
                 Stats::class,
                 Version::class,
                 Web::class,
+                Invite::class,
             ],
         ],
 
