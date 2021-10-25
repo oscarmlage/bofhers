@@ -73,7 +73,7 @@ final class Help extends AbstractCommand
      */
     protected function getCommandFQDN(string $cmd): ?string
     {
-        $cmd = ucfirst(strtolower($cmd));
+        $cmd = ucfirst(strtolower(trim($cmd, '/')));
 
         if ( ! in_array($cmd, self::VALID_COMMANDS, true)) {
             Log::debug("${cmd} no es válido.");
