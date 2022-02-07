@@ -113,6 +113,10 @@ class TelegramController extends Controller
                     case preg_match('/covid$/i', $this->text) === 1:
                         $this->sendMessage('COVAD! Cada día te quiero mad covid covid.... 🎼🎵🎼🎵🎶');
                         break;
+                    // Oh chihuahua
+                    case preg_match('/chihuahua$/i', $this->text) === 1:
+                        $this->sendMessage('oh.... chihuahua ! 🎹');
+                        break;
                     default:
                 }
             }
