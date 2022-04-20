@@ -35,9 +35,8 @@ class Kernel extends ConsoleKernel
             ->between('9:00', '23:00');
 
         $schedule->command('telegram:sendquote BOFHers_Gamers')
-            ->hourlyAt(30)
-            ->timezone('Europe/Madrid')
-            ->between('9:00', '23:00');
+            ->dailyAt('18:30')
+            ->timezone('Europe/Madrid');
     }
 
     /**
