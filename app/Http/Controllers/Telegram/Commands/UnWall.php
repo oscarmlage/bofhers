@@ -46,11 +46,11 @@ HELP;
      */
     protected function getProblemsWithURL(?string $url): ?string
     {
-        if (is_null($text)) {
+        if (is_null($url)) {
             return 'A ver, que no es complicado: /unwall **AQUI_LA_URL_LECHES**';
         }
 
-        if (empty($text)) {
+        if (empty($url)) {
             return 'Pero vamos a ver... la madre que te... : /unwall **AQUI_LA_URL_LECHES**';
         }
 
