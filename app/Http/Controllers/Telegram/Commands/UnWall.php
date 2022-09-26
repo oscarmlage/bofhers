@@ -91,8 +91,8 @@ HELP;
 
         $this->answerWithMessage(
             'Sus enlaces, gracias!
-            📰 https://12ft.io/proxy?q='.$url.'
-            📄 https://txtify.it/'.$url
+📰 https://12ft.io/proxy?q='.$url.'
+📄 https://txtify.it/'.$url
         );
     }
 }
