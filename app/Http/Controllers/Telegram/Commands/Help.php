@@ -28,6 +28,7 @@ final class Help extends AbstractCommand
         'Stats',
         'Version',
         'Web',
+        'Unwall',
     ];
 
     protected $name = 'help';
@@ -88,6 +89,10 @@ final class Help extends AbstractCommand
 
             case 'Addquote':
                 $cmd = 'AddQuote';
+                break;
+
+            case 'Unwall':
+                $cmd = 'UnWall';
                 break;
 
             default:

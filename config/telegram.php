@@ -12,6 +12,7 @@ use App\Http\Controllers\Telegram\Commands\Stats;
 use App\Http\Controllers\Telegram\Commands\Version;
 use App\Http\Controllers\Telegram\Commands\Web;
 use App\Http\Controllers\Telegram\Commands\Invite;
+use App\Http\Controllers\Telegram\Commands\UnWall;
 
 return [
     /*
@@ -64,6 +65,7 @@ return [
                 Version::class,
                 Web::class,
                 Invite::class,
+                UnWall::class,
             ],
         ],
 
