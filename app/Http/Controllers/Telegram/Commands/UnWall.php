@@ -44,7 +44,7 @@ HELP;
      *
      * @return string|null
      */
-    protected function getProblemsWithURL(?string $url): ?string
+    protected function getProblemsWithURL(?string $url)
     {
         if (is_null($url)) {
             return 'A ver, que no es complicado: /unwall **AQUI_LA_URL_LECHES**';
@@ -71,10 +71,8 @@ HELP;
      *
      * @return string|null
      */
-    protected function getValidationError(
-        ?string $url
-    ): ?string {
-        if ($err = $this->getProblemsWithURL($quote)) {
+    protected function getValidationError(?string $url) {
+        if ($err = $this->getProblemsWithURL($url)) {
             return $err;
         }
     }
