@@ -30,7 +30,7 @@ final class Version extends AbstractCommand
                 'No tengo ni idea. O mejor dicho: algo ha petao. ' .
                 'Mete un par de "dds()" para depurar el código o ' .
                 'abre puertos en el router para meter XDebug y ver ' .
-                'qué pasa.',
+                'qué pasa.'
             );
 
             return;

@@ -40,7 +40,7 @@ final class Categorias extends AbstractCommand
             GROUP BY name
             HAVING count(*) > 0
             ORDER BY count(*) DESC
-        SQL;
+SQL;
 
         $categories = DB::select(
             $sql, [

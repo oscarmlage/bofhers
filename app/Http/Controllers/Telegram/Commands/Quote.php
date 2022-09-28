@@ -39,7 +39,7 @@ final class Quote extends AbstractCommand
     Este práctico comando mostrará en el canal una de esas perlas nacaradas de sabiduría efímera que he ido almacenando con los años. Si se especifica una categoría la cita pertenecerá a la misma.
     
     A la hora de mostrar citas procuraré mostrar aquellas que no hayan sido vistas recientemente. Solo cuando haya enviado todas las que correspondan a la categoría dejaré todas otra vez como 'no leidas'. ¿Capito? 
-    HELP;
+HELP;
 
     public function __construct(QuoteModel $model)
     {
