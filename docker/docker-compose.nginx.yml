@@ -1,0 +1,61 @@
+version: "3.1"
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
+  app:
+    driver: bridge
+
+services:
+  web:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./_data/certs:/etc/nginx/certs
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-bofhers_php
+      args:
+        - PHP_VERSION=${BOFHERS_PHP_VERSION}
+        - PHP_USER=${BOFHERS_PHP_USER}
+        - PHP_UID=${BOFHERS_PHP_UID}
+        - PHP_WORKDIR=${BOFHERS_APP_WORKDIR}
+    image: bofhers_php
+    container_name: bofhers_php
+    env_file:
+      - ../.env
+      - ./.env
+    environment:
+      - VIRTUAL_HOST=${COMPOSE_PROJECT_NAME}
+      - VIRTUAL_PORT=${BOFHERS_LOCAL_BIND_PORT}
+    volumes:
+      - "..:${BOFHERS_APP_WORKDIR}"
+    ports:
+      - ${BOFHERS_LOCAL_BIND_PORT_CLIMODE}:${BOFHERS_LOCAL_BIND_PORT_CLIMODE}
+    networks:
+      - app
+      - default
+    depends_on:
+      - database
+      - phpmyadmin
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - ${PMA_VIRTUAL_PORT}:80
+    environment:
+      - VIRTUAL_HOST=pma.${COMPOSE_PROJECT_NAME}
+      - VIRTUAL_PORT=${PMA_VIRTUAL_PORT}
+      - PMA_HOST=database
+    networks:
+      - app
+      - default
+    depends_on:
+      - database
+
+

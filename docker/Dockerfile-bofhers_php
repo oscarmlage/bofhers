@@ -1,0 +1,60 @@
+ARG PHP_VERSION=7.3.6-fpm
+FROM php:${PHP_VERSION}
+
+ARG PHP_USER
+ARG PHP_UID
+ARG PHP_WORKDIR
+
+# Dependencies
+RUN apt-get update \
+    && apt-get install -y zip unzip git
+
+# PHP Configuration
+RUN docker-php-ext-install pdo_mysql
+RUN mv "${PHP_INI_DIR}/php.ini-development" "${PHP_INI_DIR}/php.ini"
+RUN echo "memory_limit=300" > "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "max_execution_time = 0" > "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "max_input_time = 120" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "max_input_vars = 1000" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "display_errors = Off" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "log_errors = On" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "log_errors_max_len = 0" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "ignore_repeated_errors = Off" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "ignore_repeated_source = Off" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "report_memleaks = On" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "track_errors = On" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "html_errors = On" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "post_max_size = 100M" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "file_uploads = On" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "upload_max_filesize = 100M" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "max_file_uploads = 3000" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "opcache.enable=0" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "opcache.enable_cli=0" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "opcache.fast_shutdown=0" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "mysql.connect_timeout = 300" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "default_socket_timeout = 300" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "expose_php = Off" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "session.save_path = /tmp" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "session.gc_maxlifetime = 86400" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "mail.add_x_header = On" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "mail.log = /var/log/php_mail.log" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "short_open_tag = On" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "magic_quotes_gpc = Off" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+RUN echo "date.timezone = Europe/Madrid" >> "${PHP_INI_DIR}/conf.d/z_bofhers.ini"
+
+# Composer executable and misc. utilities
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY ./scripts/bofhers_php/bofhers_php_entrypoint.sh /usr/local/bin
+
+# PHP user permissions
+RUN useradd -G www-data,root -u ${PHP_UID} -d /home/${PHP_USER} ${PHP_USER}
+RUN mkdir -p /home/${PHP_USER}/.composer && \
+    chown -R ${PHP_USER}: /home/${PHP_USER}
+
+# User workdir
+WORKDIR ${PHP_WORKDIR}
+USER ${PHP_USER}
+
+# Entrypoint
+ENTRYPOINT ["bofhers_php_entrypoint.sh"]

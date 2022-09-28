@@ -1,0 +1,59 @@
+version: "3.1"
+
+services:
+  database:
+    image: mysql:${MYSQL_VERSION}
+    container_name: bofhers_mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=${BOFHERS_DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${BOFHERS_DATABASE}
+      - MYSQL_USER=${BOFHERS_DB_USERNAME}
+      - MYSQL_PASSWORD=${BOFHERS_DB_PASSWORD}
+    networks:
+      - app
+    volumes:
+      - ./_data/mysql:/var/lib/mysql
+    ports:
+      - ${MYSQL_VIRTUAL_PORT}:${BOFHERS_DB_PORT}
+
+  backup:
+    image: mysql:${MYSQL_VERSION}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${BOFHERS_DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${BOFHERS_DATABASE}
+      - MYSQL_USER=${BOFHERS_DB_USERNAME}
+      - MYSQL_PASSWORD=${BOFHERS_DB_PASSWORD}
+    depends_on:
+      - database
+    command: >
+      /bin/sh -c "
+        echo '[client]' > /root/.my.cnf ;
+        echo 'user=root' >> /root/.my.cnf ;
+        echo 'password=${BOFHERS_DB_ROOT_PASSWORD}' >> /root/.my.cnf ;
+        echo 'host=${BOFHERS_DB_HOST}' >> /root/.my.cnf ;
+        mysqldump --defaults-extra-file=/root/.my.cnf $$MYSQL_DATABASE | gzip > /backup/$$MYSQL_DATABASE-$$(date '+%Y-%m-%d').sql.gz ;
+        cp /backup/$$MYSQL_DATABASE-$$(date '+%Y-%m-%d').sql.gz /backup/latest.sql.gz
+      "
+    networks:
+      - app
+    volumes:
+      - ./_data/backup:/backup
+
+  restore:
+    image: mysql:${MYSQL_VERSION}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${BOFHERS_DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${BOFHERS_DATABASE}
+      - MYSQL_USER=${BOFHERS_DB_USERNAME}
+      - MYSQL_PASSWORD=${BOFHERS_DB_PASSWORD}
+    depends_on:
+      - database
+    command: >
+      /bin/sh -c "
+        exec gunzip < /backup/latest.sql.gz | mysql -u $$BOFHERS_DB_USERNAME --password=$$BOFHERS_DB_PASSWORD -h $$BOFHERS_DB_HOST $$BOFHERS_DATABASE
+      "
+    networks:
+      - app
+    volumes:
+      - ./_data/backup:/backup
