@@ -19,3 +19,4 @@ yarn-error.log
 npm-debug.log
 yarn-error.log
 .editorconfig
+/dockerdev/_data
