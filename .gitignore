@@ -19,4 +19,5 @@ yarn-error.log
 npm-debug.log
 yarn-error.log
 .editorconfig
-/dockerdev/_data
+/docker/_data
+/docker-nginx/_data
