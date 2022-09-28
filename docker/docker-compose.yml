@@ -1,21 +1,13 @@
-version: "3.1"
+version: "3.7"
+name: "bofhers"
 
 networks:
-  default:
-    name: bofhers_network
-    driver: bridge
+  proxy:
+    external: true
+  app:
+    external: false
 
 services:
-  database:
-    image: mysql
-    container_name: bofhers_mysql
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      - MYSQL_ROOT_PASSWORD=${BOFHERS_DB_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${BOFHERS_DATABASE}
-      - MYSQL_USER=${BOFHERS_DB_USERNAME}
-      - MYSQL_PASSWORD=${BOFHERS_DB_PASSWORD}
-
   app:
     build:
       context: .
@@ -27,25 +19,43 @@ services:
         - PHP_WORKDIR=${BOFHERS_APP_WORKDIR}
     image: bofhers_php
     container_name: bofhers_php
+    env_file:
+      - ../.env
+      - ./.env
+    stdin_open: true
+    tty: true
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.bofhers.rule=Host(`${COMPOSE_PROJECT_NAME}`)'
+      - 'traefik.http.routers.bofhers.service=bofhers-service'
+      - 'traefik.http.routers.bofhers.entrypoints=websecure'
+      - 'traefik.http.routers.bofhers.tls=true'
+      - 'traefik.http.services.bofhers-service.loadbalancer.server.port=${BOFHERS_APP_PORT}'
     volumes:
       - "..:${BOFHERS_APP_WORKDIR}"
+    ports:
+      - ${BOFHERS_LOCAL_BIND_PORT_CLIMODE}:${BOFHERS_LOCAL_BIND_PORT_CLIMODE}
+    networks:
+      - app
+      - proxy
+    depends_on:
+      - database
+      - phpmyadmin
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOST=database
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.pmabofhers.rule=Host(`pma.${COMPOSE_PROJECT_NAME}`)'
+      - 'traefik.http.routers.pmabofhers.service=pmabofhers-service'
+      - 'traefik.http.routers.pmabofhers.entrypoints=websecure'
+      - 'traefik.http.routers.pmabofhers.tls=true'
+      - 'traefik.http.services.pmabofhers-service.loadbalancer.server.port=80'
+    networks:
+      - app
+      - proxy
     depends_on:
       - database
 
-  web:
-    image: nginx
-    container_name: bofhers_nginx
-    volumes:
-      - "./templates:/etc/nginx/templates"
-      - "..:${BOFHERS_APP_WORKDIR}"
-      - "./scripts/wait_for_it.sh:/usr/local/bin/wait_for_it.sh"
-      - "./scripts/bofhers_nginx/90_bofhers_nginx_entrypoint.sh:/docker-entrypoint.d/90_bofhers_nginx_entrypoint.sh"
-    environment:
-      - NGINX_PORT=${BOFHERS_NGINX_PORT}
-      - NGINX_SERVER_NAME=${BOFHERS_NGINX_SERVER_NAME}
-      - NGINX_ROOT=${BOFHERS_NGINX_ROOT}
-      - NGINX_FASTCGI_PASS=${BOFHERS_NGINX_CGI_PROXY}
-    ports:
-      - "${BOFHERS_LOCAL_BIND_PORT}:${BOFHERS_APP_PORT}"
-    depends_on:
-      - app

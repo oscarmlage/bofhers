@@ -20,7 +20,7 @@ fi
 if [[ ! -d vendor ]];
 then
   _msg "Installing composer dependencies..."
-  # composer install
+  composer install
 else
   _msg "Composer dependencies already installed, skipping."
 fi
@@ -28,8 +28,8 @@ fi
 # Create laravel encryption key if it is not present on the file
 if ! grep -Eq 'APP_KEY=.{50}' .env; then
   _msg "Creating encryption key..."
-  # php artisan key:generate
-  # php artisan cache:clear
+  php artisan key:generate
+  php artisan cache:clear
 else
   _msg "Encryption key already generated, skipping."
 fi
@@ -38,12 +38,18 @@ fi
 if [[ ! -f vendor/.backpack_installed ]];
 then
   _msg "Installing backpack..."
-  # php artisan backpack:base:install
+  php artisan backpack:base:install
   touch vendor/.backpack_installed
 else
   _msg "Backpack already installed, skipping."
 fi
 
-_msg "Starting artisan..."
-php artisan serve --host 0.0.0.0 --port=${BOFHERS_LOCAL_BIND_PORT_CLIMODE}
+_msg "Setting up webhook..."
+php artisan telegram:webhook --setup --all
 
+_msg "Registering bot commands..."
+php artisan telegram:registerBotcommands
+
+# Run php-fpm
+_msg "Starting php-fpm..."
+php-fpm
