@@ -31,6 +31,10 @@ class TelegramCanal extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function quotes() {
+        return $this->hasMany('App\Models\Quote', 'chat_id', 'chat_id');
+    }
+
 
     /*
     |--------------------------------------------------------------------------

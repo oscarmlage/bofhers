@@ -67,6 +67,7 @@ class QuoteCrudController extends CrudController
             'tab' => 'Basic data',
             'wrapperAttributes' => ['class' => 'col-md-6'],
         ]);
+
         $this->crud->addField([
             'name' => 'quote',
             'tab' => 'Basic data',
@@ -93,7 +94,20 @@ class QuoteCrudController extends CrudController
 
         /* Columns */
         $this->crud->addColumn(['name' => 'id', 'label' => 'id' ] );
-        $this->crud->addColumn(['name' => 'chat_id']);
+        $this->crud->addColumn([
+            'name' => 'chat_id',
+            'label' => 'Channel',
+            'tab' => 'Basic data',
+            'type' => 'closure',
+            'function' => function($entry) {
+                if(isset($entry->channel->name)) {
+                    return $entry->channel->name;
+                } else {
+                    return "wrong";
+                }
+            },
+            'wrapperAttributes' => ['class' => 'col-md-6'],
+        ]);
         $this->crud->addColumn(['name' => 'nick']);
         $this->crud->addColumn([
             'name' => 'quote',
@@ -108,6 +122,21 @@ class QuoteCrudController extends CrudController
                 return $entry->active ? '<span class="label label-success"><i class="fa fa-check" title="Active"></i></span>' : '<span class="label label-danger"><i class="fa fa-remove" title="Inactive"></i></span>';
             }
         ]);
+
+        // Filters
+        $this->crud->addFilter([
+            'name' => 'chat_id',
+            'type' => 'select2',
+            'label'=> 'Channel',
+            'preserve' => true
+            ], function() {
+                return \App\Models\TelegramCanal::all()
+                ->pluck('name', 'chat_id')
+                ->toArray();
+            }, function($value) {
+                $this->crud->addClause('where', 'chat_id', $value);
+            }
+        );
 
         /* Buttons */
         //$this->crud->limit(500);

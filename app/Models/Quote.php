@@ -136,7 +136,11 @@ class Quote extends Model
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
-    */
+     */
+    public function channel() {
+        return $this->belongsTo('App\Models\TelegramCanal', 'chat_id', 'chat_id');
+    }
+
     public function categories()
     {
         return $this->belongsToMany(
