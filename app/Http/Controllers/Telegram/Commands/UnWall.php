@@ -91,7 +91,7 @@ HELP;
 
         $this->answerWithMessage(
             'Sus enlaces, gracias!
-📰 https://clearthis.page//?u='.$url.'
+📰 https://clearthis.page/?u='.$url.'
 📰 https://12ft.io/proxy?q='.$url.'
 📄 https://txtify.it/'.$url
         );
