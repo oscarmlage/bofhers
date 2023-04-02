@@ -60,19 +60,19 @@ class Quote extends Model
      *                                   must belong to. If null, it will be
      *                                   ignored.
      *
-     * @return string                    The text of the quote, or an
-     *                                   informative status message if something
-     *                                   went wrong.
+     * @return object                    The object with the quote and params,
+     *                                   or an informative status message if
+     *                                   something went wrong.
      */
     public static function getAndMarkRandomQuoteText(
         string $chat_id,
         string $category_name = null
-    ): string {
+    ): object {
         $category = null;
 
         if ( ! is_null($category_name)) {
             if ( ! $category = Category::fromName($category_name)) {
-                return '404: category not found';
+                return (object) [ 'quote' => '404: quote not found', 'type' => 'text' ];
             }
         }
 
@@ -101,7 +101,7 @@ class Quote extends Model
         if ($_quoteBuilder()
                 ->where('active', '<>', Quote::QUOTE_STATUS_NOT_VALIDATED)
                 ->count() == 0) {
-            return '404: quote not found';
+            return (object) [ 'text' => '404: quote not found', 'type' => 'text' ];
         }
 
         // There are indeed quotes. Let's try to find one that hasn't been seen
@@ -116,7 +116,7 @@ class Quote extends Model
             $quote->active = static::QUOTE_STATUS_ALREADY_SAID;
             $quote->save();
 
-            return $quote->quote;
+            return (object) [ 'text' => $quote->quote, 'type' => $quote->type, 'caption' => $quote->caption, 'file_unique_id' => $quote->file_unique_id ];
         }
 
         /**
@@ -129,7 +129,7 @@ class Quote extends Model
             ->where('active', static::QUOTE_STATUS_ALREADY_SAID)
             ->update(['active' => static::QUOTE_STATUS_NOT_YET_SAID]);
 
-        return 'Pasamos de fase, quotes reiniciados, nivel DOS';
+        return (object) [ 'text' => 'Pasamos de fase, quotes reiniciados, nivel DOS' ];
     }
 
     /*

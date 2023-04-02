@@ -39,7 +39,8 @@ class TelegramController extends Controller
             $this->first_name       = isset($request['message']['from']['first_name']) ? $request['message']['from']['first_name'] : 'no-first-name';
             $this->last_name        = isset($request['message']['from']['last_name']) ? $request['message']['from']['last_name'] : 'no-last-name';
             $this->telegram_user_id = isset($request['message']['from']['id']) ? $request['message']['from']['id'] : 'no-telegram-id';
-            $this->text             = isset($request['message']['text']) ? $request['message']['text'] : 'no-text';
+            $this->caption          = isset($request['message']['caption']) ? $request['message']['caption'] : 'no-text';
+            $this->text             = isset($request['message']['text']) ? $request['message']['text'] : $this->caption;
             $this->message_id       = isset($request['message']['message_id']) ? $request['message']['message_id'] : '';
 
             /* $this->chat_id = $request['message']['chat']['id']; */

@@ -160,6 +160,33 @@ HELP;
     protected function createNewQuote(string $text): ?Quote
     {
         $update = $this->getUpdate();
+
+        $type = "text";
+        $caption = "no caption";
+        $fileUniqueId = "";
+
+        // Check if message has a photo
+        if (property_exists($update->message, "photo")) {
+            $index = count($update->message->photo) - 1;
+            $fileUniqueId = $update->message->photo[$index]->file_unique_id;
+            $type = "photo";
+            $caption = $update->message->caption;
+        }
+
+        // Check if message has a video
+        if (property_exists($update->message, "video")) {
+            $fileUniqueId = $update->message->video->file_unique_id;
+            $type = "video";
+            $caption = $update->message->caption;
+        }
+
+        // Check if message has an audio
+        if (property_exists($update->message, "audio")) {
+            $fileUniqueId = $update->message->audio->file_unique_id;
+            $type = "audio";
+            $caption = $update->message->caption;
+        }
+
         $quote  = new Quote([
             'chat_id'          => $update->getChat()->id,
             'nick'             => $update->message->from->username,
@@ -167,6 +194,9 @@ HELP;
             'last_name'        => $update->message->from->lastName,
             'telegram_user_id' => $update->message->from->id,
             'quote'            => $text,
+            'caption'          => $caption,
+            'file_unique_id'   => $fileUniqueId,
+            'type'             => $type,
             'active'           => Quote::QUOTE_STATUS_NOT_VALIDATED,
         ]);
 

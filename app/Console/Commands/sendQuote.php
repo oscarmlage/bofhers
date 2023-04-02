@@ -52,24 +52,49 @@ class sendQuote extends Command
         $category = $this->argument('category');
         $canales = TelegramCanal::where('active', 1)->get();
 
-        if($canal) {
+        if ($canal) {
             $canales = TelegramCanal::where('name', "#".$canal)->where('active', 1)->get();
         }
 
-        foreach($canales as $canal){
-            $quote = Quote::getAndMarkRandomQuoteText(
-                $canal->chat_id, $category ?? null
-            );
+        foreach ($canales as $canal){
+            $quote = Quote::getAndMarkRandomQuoteText($canal->chat_id, $category ?? null);
 
-            $data = [
-                'chat_id' => $canal->chat_id,
-                'parse_mode' => 'HTML',
-                'text' => $quote,
-            ];
-
-            $this->telegram->sendMessage($data);
+            switch (true) {
+                default:
+                case $quote->type === 'text':
+                    $data = [
+                        'chat_id' => $canal->chat_id,
+                        'parse_mode' => 'HTML',
+                        'text' => $quote->text,
+                    ];
+                    $this->telegram->sendMessage($data);
+                    break;
+                case $quote->type === 'photo':
+                    $data = [
+                        'chat_id' => $canal->chat_id,
+                        'caption' => $quote->caption,
+                        'photo'   => $quote->file_unique_id
+                    ];
+                    $this->telegram->sendPhoto($data);
+                    break;
+                case $quote->type === 'video':
+                    $data = [
+                        'chat_id' => $canal->chat_id,
+                        'caption' => $quote->caption,
+                        'video'   => $quote->file_unique_id
+                    ];
+                    $this->telegram->sendVideo($data);
+                    break;
+                case $quote->type === 'audio':
+                    $data = [
+                        'chat_id' => $canal->chat_id,
+                        'caption' => $quote->caption,
+                        'audio'   => $quote->file_unique_id
+                    ];
+                    $this->telegram->sendAudio($data);
+                    break;
+            }
         }
-
     }
 }
 
