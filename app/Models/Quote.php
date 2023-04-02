@@ -72,7 +72,7 @@ class Quote extends Model
 
         if ( ! is_null($category_name)) {
             if ( ! $category = Category::fromName($category_name)) {
-                return (object) [ 'quote' => '404: quote not found', 'type' => 'text' ];
+                return (object) [ 'quote' => '404: category not found', 'type' => 'text' ];
             }
         }
 
