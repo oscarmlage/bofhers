@@ -194,7 +194,7 @@ HELP;
             'last_name'        => $update->message->from->lastName,
             'telegram_user_id' => $update->message->from->id,
             'quote'            => $text,
-            'caption'          => $caption,
+            'caption'          => str_replace("/addquote ", "", $caption),
             'file_unique_id'   => $fileUniqueId,
             'type'             => $type,
             'active'           => Quote::QUOTE_STATUS_NOT_VALIDATED,
