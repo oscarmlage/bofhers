@@ -66,10 +66,12 @@ HELP;
             }
         }
 
-        $text = QuoteModel::getAndMarkRandomQuoteText(
+        $quote = QuoteModel::getAndMarkRandomQuoteText(
             $this->getChatId(),
             $category
         );
-        $this->answerWithMessage($text);
+        if($quote->type == "text") {
+            $this->answerWithMessage($quote->text);
+        }
     }
 }
