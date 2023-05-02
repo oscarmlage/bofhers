@@ -73,6 +73,18 @@ class QuoteCrudController extends CrudController
             'tab' => 'Basic data',
             'type' => 'simplemde',
         ]);
+
+        $this->crud->addField([
+            'name' => 'type',
+            'tab' => 'Basic data',
+            'wrapperAttributes' => ['class' => 'col-md-6'],
+        ]);
+        $this->crud->addField([
+            'name' => 'caption',
+            'tab' => 'Basic data',
+            'wrapperAttributes' => ['class' => 'col-md-6'],
+        ]);
+
         $this->crud->addField([
             'label' => "Categories",
             'type' => 'select2_multiple',
@@ -114,6 +126,7 @@ class QuoteCrudController extends CrudController
             'type' => 'text',
             'limit' => 40,
         ]);
+        $this->crud->addColumn(['name' => 'type']);
         $this->crud->addColumn([
             'name' => 'active',
             'type' => 'closure',
