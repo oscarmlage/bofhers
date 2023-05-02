@@ -72,7 +72,7 @@ class Quote extends Model
 
         if ( ! is_null($category_name)) {
             if ( ! $category = Category::fromName($category_name)) {
-                return (object) [ 'quote' => '404: category not found', 'type' => 'text' ];
+                return (object) [ 'text' => '404: category not found', 'type' => 'text' ];
             }
         }
 
@@ -129,7 +129,7 @@ class Quote extends Model
             ->where('active', static::QUOTE_STATUS_ALREADY_SAID)
             ->update(['active' => static::QUOTE_STATUS_NOT_YET_SAID]);
 
-        return (object) [ 'text' => 'Pasamos de fase, quotes reiniciados, nivel DOS' ];
+        return (object) [ 'text' => 'Pasamos de fase, quotes reiniciados, nivel DOS', 'type' => 'text' ];
     }
 
     /*
