@@ -3122,16 +3122,16 @@
         },
         {
             "name": "studio-42/elfinder",
-            "version": "2.1.56",
+            "version": "2.1.62",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Studio-42/elFinder.git",
-                "reference": "fa09409aaffe855e1e33b958301d5597c2036062"
+                "reference": "91133c14a341158beca82aede0b2138236a96bc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Studio-42/elFinder/zipball/fa09409aaffe855e1e33b958301d5597c2036062",
-                "reference": "fa09409aaffe855e1e33b958301d5597c2036062",
+                "url": "https://api.github.com/repos/Studio-42/elFinder/zipball/91133c14a341158beca82aede0b2138236a96bc8",
+                "reference": "91133c14a341158beca82aede0b2138236a96bc8",
                 "shasum": ""
             },
             "require": {
@@ -3176,7 +3176,17 @@
             ],
             "description": "File manager for web",
             "homepage": "http://elfinder.org",
-            "time": "2020-04-09T02:33:28+00:00"
+            "support": {
+                "issues": "https://github.com/Studio-42/elFinder/issues",
+                "source": "https://github.com/Studio-42/elFinder/tree/2.1.62"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/nao-pon",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-06-13T16:39:07+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -6548,5 +6558,5 @@
         "php": "^7.1.3"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.3.0"
 }
